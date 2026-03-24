@@ -40,7 +40,7 @@
             animation: sway 4s ease-in-out infinite; transform-origin: top;
         }
         .thread {
-            width: 1px; height: 75px; 
+            width: 1px; height: 80px; 
             background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 100%);
         }
         .lantern {
@@ -48,12 +48,9 @@
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             box-shadow: 0 0 15px var(--color); opacity: 0.7;
         }
-        @keyframes sway { 
-            0%, 100% { transform: rotate(-2deg); } 
-            50% { transform: rotate(2deg); } 
-        }
+        @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 
-        /* --- MOBILE HEADER --- */
+        /* --- NAVIGATION --- */
         .mobile-header {
             display: none; padding: 15px 20px; background: var(--sidebar-bg);
             justify-content: space-between; align-items: center;
@@ -61,15 +58,13 @@
         }
         .menu-toggle { font-size: 1.5rem; background: none; border: none; color: var(--accent-mint); cursor: pointer; }
 
-        /* --- SIDEBAR --- */
         #sidebar {
             width: 280px; background: var(--sidebar-bg); height: 100vh;
             position: fixed; left: 0; top: 0; padding: 40px 25px;
             border-right: 1px solid var(--glass); display: flex; flex-direction: column; gap: 10px;
             z-index: 1000; transition: transform 0.3s ease;
         }
-        .logo-area { text-align: center; margin-bottom: 25px; border-bottom: 1px solid var(--glass); padding-bottom: 15px; }
-        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.4rem; color: var(--accent-mint); letter-spacing: 2px; display: block; margin-top: 5px; }
+        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.4rem; color: var(--accent-mint); letter-spacing: 2px; display: block; margin-top: 5px; text-align: center;}
 
         .nav-btn {
             background: none; border: 1px solid transparent; color: var(--text-main);
@@ -78,7 +73,7 @@
         }
         .nav-btn:hover { background: var(--glass); color: var(--accent-mint); }
 
-        /* --- CONTENT CONTAINERS --- */
+        /* --- CONTENT --- */
         #main-content { margin-left: 280px; flex: 1; padding: 60px 20px; transition: 0.3s; }
         .container { display: none; max-width: 650px; margin: 0 auto; animation: fadeIn 0.5s ease; }
         .active-section { display: block; }
@@ -86,9 +81,8 @@
 
         /* --- WIDGETS --- */
         .info-widget {
-            background: var(--glass); border: 1px solid var(--glass); 
+            background: var(--glass); border: 1px solid var(--accent-lavender); 
             border-radius: 20px; padding: 20px; margin-bottom: 25px; text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         .counter-box {
             background: radial-gradient(circle, #1a1f26 0%, #0d1117 100%);
@@ -96,19 +90,14 @@
             margin: 30px auto; border: 2px solid var(--accent-lavender); 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            transition: transform 0.1s;
         }
-        .counter-box:active { transform: scale(0.96); }
         #count-num { font-size: 4rem; font-family: 'Cinzel'; color: var(--accent-mint); }
 
         .library-card {
-            background: #161b22; padding: 25px; border-radius: 15px;
-            border: 1px solid var(--glass); margin-bottom: 15px; transition: 0.2s;
+            background: #161b22; padding: 20px; border-radius: 15px;
+            border: 1px solid var(--glass); margin-bottom: 15px; cursor: pointer;
         }
-        .dua-item { cursor: pointer; }
-        .dua-item:hover { border-color: var(--accent-rose); transform: translateY(-2px); }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
             .mobile-header { display: flex; }
             #sidebar { transform: translateX(-100%); }
@@ -125,7 +114,7 @@
 
     <header class="mobile-header">
         <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-        <span style="font-family: 'Cinzel'; color: var(--accent-mint); letter-spacing: 1px;">SoulSync</span>
+        <span style="font-family: 'Cinzel'; color: var(--accent-mint);">SoulSync</span>
         <div style="width: 24px;"></div>
     </header>
 
@@ -136,26 +125,20 @@
     </div>
 
     <aside id="sidebar">
-        <div class="logo-area"><span style="font-size: 2.2rem;">🌙</span><span class="sidebar-brand">SoulSync</span></div>
+        <div style="text-align: center; margin-bottom: 20px;"><span style="font-size: 2.2rem;">🌙</span><span class="sidebar-brand">SoulSync</span></div>
         <button class="nav-btn" onclick="showSection('zikr')">💠 <span>Tasbeeh</span></button>
         <button class="nav-btn" onclick="showSection('essence')">📖 <span>Essence of Islam</span></button>
         <button class="nav-btn" onclick="showSection('library')">🌸 <span>Dua Library</span></button>
         <button class="nav-btn" onclick="showSection('quran')">🌿 <span>Quran</span></button>
-        <button class="nav-btn" onclick="showSection('stats')">📈 <span>Progress</span></button>
-        
-        <button class="nav-btn" style="margin-top: auto; border-top: 1px solid var(--glass); padding-top: 20px; color: var(--accent-mint);" onclick="shareApp()">
-            📲 <span>Share SoulSync</span>
-        </button>
+        <button class="nav-btn" style="margin-top: auto; color: var(--accent-mint);" onclick="shareApp()">📲 <span>Share App</span></button>
     </aside>
 
     <main id="main-content">
-        <div class="info-widget" style="border-color: var(--accent-lavender);">
-            <div id="hijri-date" style="font-family: 'Amiri', serif; font-size: 1.4rem; color: var(--accent-mint);">Loading Hijri...</div>
-            <div style="font-size: 0.65rem; color: #777; letter-spacing: 2px; margin: 4px 0 12px 0;">ISLAMIC DATE</div>
-            
+        <div class="info-widget">
+            <div id="hijri-date" style="font-family: 'Amiri'; font-size: 1.4rem; color: var(--accent-mint);">Loading Hijri...</div>
+            <div style="font-size: 0.65rem; color: #777; letter-spacing: 2px; margin: 5px 0 10px 0;">ISLAMIC DATE</div>
             <hr style="border: 0; border-top: 1px solid var(--glass); margin: 10px 0;">
-            
-            <div style="font-size: 0.7rem; color: var(--accent-mint); letter-spacing: 1.5px;">EID-AL-FITR COUNTDOWN</div>
+            <div style="font-size: 0.7rem; color: var(--accent-mint); letter-spacing: 1px;">EID-AL-FITR COUNTDOWN</div>
             <div id="timer" style="font-size: 1.2rem; color: var(--accent-rose); font-weight: 600; font-family: 'Cinzel';">00d : 00h : 00m</div>
         </div>
 
@@ -165,88 +148,28 @@
                 <span id="count-num">0</span>
                 <small style="color: #444; font-size: 0.65rem; letter-spacing: 2px;">HEARTBEAT OF ZIKR</small>
             </div>
-            <div style="text-align: center;">
-                <button class="nav-btn" style="margin: 0 auto; width: auto; border: 1px solid var(--accent-rose); color: var(--accent-rose); padding: 8px 30px;" onclick="resetCount()">Reset</button>
-            </div>
+            <div style="text-align: center;"><button class="nav-btn" style="margin: 0 auto; width: auto; border: 1px solid var(--accent-rose); color: var(--accent-rose); padding: 8px 30px;" onclick="resetCount()">Reset</button></div>
         </div>
 
         <div id="essence" class="container">
-            <h2 style="font-family: 'Cinzel'; color: var(--accent-mint); margin-bottom: 25px;">The Soul's Sanctuary</h2>
+            <h2 style="font-family: 'Cinzel'; color: var(--accent-mint);">The Soul's Sanctuary</h2>
             <div class="library-card" style="border-left: 3px solid var(--accent-mint);">
-                <h3 style="color: var(--accent-mint); font-family: 'Cinzel'; margin-top:0;">A Sacred Connection</h3>
-                <p style="font-size: 0.92rem; line-height: 1.7; color: #ccc;">Islam is the softest whisper between you and your Creator. It is the realization that no matter how loud the world gets, you are never truly alone. Worship is the bridge that turns your worries into prayers.</p>
+                <h3 style="color: var(--accent-mint); font-family: 'Cinzel'; margin: 0 0 10px 0;">The Heart's Whisper</h3>
+                <p style="font-size: 0.9rem; line-height: 1.7; color: #ccc;">Islam is the softest whisper between you and your Creator. It is the realization that no matter how loud the world gets, you are never truly alone. Worship is the bridge that turns your worries into prayers.</p>
             </div>
             <div class="library-card" style="border-left: 3px solid var(--accent-rose);">
-                <h3 style="color: var(--accent-rose); font-family: 'Cinzel'; margin-top:0;">The Healing in Sujud</h3>
-                <p style="font-size: 0.92rem; line-height: 1.7; color: #ccc;">In Sujud, you are closest to Allah. In that moment, the weight of the heavens is lifted. It is the only place where whispering to the ground is heard above the seven heavens.</p>
-            </div>
-            <div class="library-card" style="border-left: 3px solid var(--accent-lavender);">
-                <h3 style="color: var(--accent-lavender); font-family: 'Cinzel'; margin-top:0;">Divine Mercy</h3>
-                <p style="font-size: 0.92rem; line-height: 1.7; color: #ccc;">Allah’s mercy is greater than any mistake. Every 'Alhamdulillah' is a flower planted in your eternal garden, and every 'Astaghfirullah' is a shield for your soul.</p>
+                <h3 style="color: var(--accent-rose); font-family: 'Cinzel'; margin: 0 0 10px 0;">The Healing in Sujud</h3>
+                <p style="font-size: 0.9rem; line-height: 1.7; color: #ccc;">In Sujud, you are closest to Allah. In that moment, the weight of the heavens is lifted. It is the only place where whispering to the ground is heard above the seven heavens.</p>
             </div>
         </div>
 
         <div id="library" class="container">
-            <h2 style="font-family: 'Cinzel'; color: var(--accent-rose); margin-bottom: 25px;">Dua Library</h2>
-            <div class="library-card dua-item" onclick="setDua('SubhanAllah')"><b>SubhanAllah</b><br><small style="color:#777">Glory be to Allah</small></div>
-            <div class="library-card dua-item" onclick="setDua('Alhamdulillah')"><b>Alhamdulillah</b><br><small style="color:#777">Praise be to Allah</small></div>
-            <div class="library-card dua-item" onclick="setDua('Allahu Akbar')"><b>Allahu Akbar</b><br><small style="color:#777">Allah is Greatest</small></div>
-            <div class="library-card dua-item" onclick="setDua('Astaghfirullah')"><b>Astaghfirullah</b><br><small style="color:#777">I seek forgiveness</small></div>
-            <div class="library-card dua-item" onclick="setDua('La Ilaha Illallah')"><b>La Ilaha Illallah</b><br><small style="color:#777">There is no God but Allah</small></div>
-            <div class="library-card dua-item" onclick="setDua('Hasbunallahu Wa Ni’mal Wakeel')"><b>Hasbunallahu Wa Ni’mal Wakeel</b><br><small style="color:#777">Allah is sufficient for us</small></div>
+            <h2 style="font-family: 'Cinzel'; color: var(--accent-rose);">Dua Library</h2>
+            <div class="library-card" onclick="setDua('SubhanAllah')"><b>SubhanAllah</b><br><small style="color:#777">Glory be to Allah</small></div>
+            <div class="library-card" onclick="setDua('Alhamdulillah')"><b>Alhamdulillah</b><br><small style="color:#777">Praise be to Allah</small></div>
+            <div class="library-card" onclick="setDua('Allahu Akbar')"><b>Allahu Akbar</b><br><small style="color:#777">Allah is Greatest</small></div>
+            <div class="library-card" onclick="setDua('La Ilaha Illallah')"><b>La Ilaha Illallah</b><br><small style="color:#777">There is no God but Allah</small></div>
+            <div class="library-card" onclick="setDua('Hasbunallahu Wa Ni’mal Wakeel')"><b>Hasbunallahu Wa Ni’mal Wakeel</b><br><small style="color:#777">Allah is sufficient for us</small></div>
         </div>
 
-        <div id="quran" class="container">
-            <h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Quran</h2>
-            <p style="color: #777; text-align: center; margin-top: 50px;">Digital Mushaf loading soon...</p>
-        </div>
-
-        <div id="stats" class="container">
-            <h2 style="color: var(--accent-rose); font-family: 'Cinzel';">Zikr Progress</h2>
-            <canvas id="lineChart" style="background: #12151A; padding: 20px; border-radius: 15px;"></canvas>
-        </div>
-    </main>
-
-    <script>
-        let count = 0;
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            const overlay = document.querySelector('.sidebar-overlay');
-            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function showSection(id) {
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-section'));
-            document.getElementById(id).classList.add('active-section');
-            if(window.innerWidth <= 900) toggleSidebar();
-        }
-
-        function countUp() {
-            count++;
-            document.getElementById('count-num').innerText = count;
-            if(navigator.vibrate) navigator.vibrate(35);
-        }
-
-        function resetCount() { count = 0; document.getElementById('count-num').innerText = 0; }
-
-        function setDua(txt) {
-            document.getElementById('active-zikr-text').innerText = txt;
-            showSection('zikr');
-            resetCount();
-        }
-
-        // ISLAMIC DATE & EID COUNTDOWN LOGIC
-        function updateLiveInfo() {
-            // Hijri Date Display
-            const today = new Date();
-            const hijriOptions = { calendar: 'islamic-uma', day: 'numeric', month: 'long', year: 'numeric' };
-            try {
-                const hijriDate = new Intl.DateTimeFormat('en-u-ca-islamic-uma', hijriOptions).format(today);
-                document.getElementById('hijri-date').innerText = hijriDate;
-            } catch(e) { document.getElementById('hijri-date').innerText = today.toDateString(); }
-            
-            // Eid Countdown (Targeting March 30, 2026)
-            const eidTarget = new Date("March 30, 2026 00:00:00").getTime();
-            const now = new Date().getTime();
-            const distance = eidTarget - now;
+        <div id="quran" class="container"><h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Quran</h2><p style="color:#777">
