@@ -4,111 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SoulSync | Zikr & Quran</title>
-    <link rel="apple-touch-icon" href="logo.png.jpg">
     <link rel="icon" type="image/png" href="logo.png.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --bg: #0A0C10; --sidebar-bg: #12151A; --accent-mint: #B2D8D8; --accent-rose: #FFD1DC; --accent-lavender: #E0BBE4; --text-main: #F0F6FC; --glass: rgba(255, 255, 255, 0.08); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background-color: var(--bg); color: var(--text-main); font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        body { margin: 0; background-color: var(--bg); color: var(--text-main); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        
+        /* LANTERNS */
         .lantern-container { position: fixed; top: 0; width: 100%; height: 200px; pointer-events: none; z-index: 5; display: flex; justify-content: space-around; }
-        .lantern-group { display: flex; flex-direction: column; align-items: center; animation: sway 4s ease-in-out infinite; transform-origin: top; }
-        .thread { width: 1px; height: 80px; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 100%); }
-        .lantern { width: 22px; height: 35px; background: var(--color); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); box-shadow: 0 0 15px var(--color); opacity: 0.7; }
+        .lantern-group { display: flex; flex-direction: column; align-items: center; animation: sway 4s infinite; transform-origin: top; }
+        .thread { width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4)); }
+        .lantern { width: 20px; height: 32px; background: var(--color); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); opacity: 0.7; }
         @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
-        .mobile-header { display: none; padding: 15px 20px; background: var(--sidebar-bg); justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass); position: sticky; top: 0; z-index: 100; }
-        .menu-toggle { font-size: 1.5rem; background: none; border: none; color: var(--accent-mint); cursor: pointer; }
-        #sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; left: 0; top: 0; padding: 40px 25px; border-right: 1px solid var(--glass); display: flex; flex-direction: column; gap: 10px; z-index: 1000; transition: transform 0.3s ease; }
-        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.4rem; color: var(--accent-mint); letter-spacing: 2px; display: block; margin-top: 5px; text-align: center;}
-        .nav-btn { background: none; border: 1px solid transparent; color: var(--text-main); padding: 12px 15px; text-align: left; font-size: 0.85rem; cursor: pointer; border-radius: 10px; transition: 0.3s; display: flex; align-items: center; gap: 10px; width: 100%; }
-        .nav-btn:hover { background: var(--glass); color: var(--accent-mint); }
-        #main-content { margin-left: 280px; flex: 1; padding: 60px 20px; transition: 0.3s; }
-        .container { display: none; max-width: 650px; margin: 0 auto; animation: fadeIn 0.5s ease; }
+
+        /* SIDEBAR & HEADER */
+        .mobile-header { display: none; padding: 15px; background: var(--sidebar-bg); justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass); position: sticky; top: 0; z-index: 100; }
+        #sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; left: 0; top: 0; padding: 40px 20px; border-right: 1px solid var(--glass); z-index: 1000; transition: 0.3s; }
+        .nav-btn { background: none; border: none; color: var(--text-main); padding: 12px; text-align: left; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 10px; border-radius: 8px; }
+        .nav-btn:hover { background: var(--glass); }
+
+        #main-content { margin-left: 260px; padding: 40px 20px; transition: 0.3s; }
+        .container { display: none; max-width: 600px; margin: 0 auto; }
         .active-section { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .info-widget { background: var(--glass); border: 1px solid var(--accent-lavender); border-radius: 20px; padding: 20px; margin-bottom: 25px; text-align: center; }
-        .counter-box { background: radial-gradient(circle, #1a1f26 0%, #0d1117 100%); width: min(70vw, 260px); height: min(70vw, 260px); border-radius: 50%; margin: 30px auto; border: 2px solid var(--accent-lavender); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        #count-num { font-size: 4rem; font-family: 'Cinzel'; color: var(--accent-mint); }
-        .library-card { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid var(--glass); margin-bottom: 15px; cursor: pointer; }
-        @media (max-width: 900px) { .mobile-header { display: flex; } #sidebar { transform: translateX(-100%); } #sidebar.open { transform: translateX(0); } #main-content { margin-left: 0; padding: 30px 15px; } .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; display: none; } .sidebar-overlay.show { display: block; } }
+
+        /* WIDGETS */
+        .info-widget { background: var(--glass); border: 1px solid var(--accent-lavender); border-radius: 15px; padding: 15px; margin-bottom: 30px; text-align: center; }
+        .counter-box { background: #161b22; width: 240px; height: 240px; border-radius: 50%; margin: 30px auto; border: 2px solid var(--accent-lavender); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
+        #count-num { font-size: 3.5rem; font-family: 'Cinzel'; color: var(--accent-mint); }
+        .card { background: #161b22; padding: 18px; border-radius: 12px; border: 1px solid var(--glass); margin-bottom: 12px; cursor: pointer; }
+
+        @media (max-width: 900px) {
+            .mobile-header { display: flex; }
+            #sidebar { transform: translateX(-100%); }
+            #sidebar.open { transform: translateX(0); }
+            #main-content { margin-left: 0; }
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-    <header class="mobile-header"><button class="menu-toggle" onclick="toggleSidebar()">☰</button><span style="font-family: 'Cinzel'; color: var(--accent-mint);">SoulSync</span><div style="width: 24px;"></div></header>
+    <header class="mobile-header"><button onclick="toggleSidebar()" style="background:none; border:none; color:white; font-size:1.5rem;">☰</button><span style="font-family:'Cinzel';">SoulSync</span><div style="width:24px;"></div></header>
+
     <div class="lantern-container">
         <div class="lantern-group"><div class="thread"></div><div class="lantern" style="--color: var(--accent-mint);"></div></div>
-        <div class="lantern-group" style="margin-top: 40px;"><div class="thread"></div><div class="lantern" style="--color: var(--accent-rose);"></div></div>
-        <div class="lantern-group" style="margin-top: 20px;"><div class="thread"></div><div class="lantern" style="--color: var(--accent-lavender);"></div></div>
+        <div class="lantern-group" style="margin-top: 30px;"><div class="thread"></div><div class="lantern" style="--color: var(--accent-rose);"></div></div>
     </div>
+
     <aside id="sidebar">
-        <div style="text-align: center; margin-bottom: 20px;"><span style="font-size: 2.2rem;">🌙</span><span class="sidebar-brand">SoulSync</span></div>
-        <button class="nav-btn" onclick="showSection('zikr')">💠 <span>Tasbeeh</span></button>
-        <button class="nav-btn" onclick="showSection('essence')">📖 <span>Essence of Islam</span></button>
-        <button class="nav-btn" onclick="showSection('library')">🌸 <span>Dua Library</span></button>
-        <button class="nav-btn" onclick="showSection('quran')">🌿 <span>Quran</span></button>
-        <button class="nav-btn" style="margin-top: auto; color: var(--accent-mint);" onclick="shareApp()">📲 <span>Share App</span></button>
+        <h2 style="font-family:'Cinzel'; text-align:center; color:var(--accent-mint);">SoulSync</h2>
+        <button class="nav-btn" onclick="showSection('zikr')">💠 Tasbeeh</button>
+        <button class="nav-btn" onclick="showSection('library')">🌸 Dua Library</button>
+        <button class="nav-btn" onclick="showSection('quran')">🌿 Quran</button>
     </aside>
+
     <main id="main-content">
         <div class="info-widget">
-            <div id="hijri-date" style="font-family: 'Amiri'; font-size: 1.4rem; color: var(--accent-mint);">Loading Hijri...</div>
-            <div style="font-size: 0.65rem; color: #777; letter-spacing: 2px; margin: 5px 0 10px 0;">ISLAMIC DATE</div>
-            <hr style="border: 0; border-top: 1px solid var(--glass); margin: 10px 0;">
-            <div style="font-size: 0.7rem; color: var(--accent-mint); letter-spacing: 1px;">EID-AL-FITR COUNTDOWN</div>
-            <div id="timer" style="font-size: 1.2rem; color: var(--accent-rose); font-weight: 600; font-family: 'Cinzel';">00d : 00h : 00m</div>
+            <div id="hijri-date" style="font-family:'Amiri'; font-size:1.4rem; color:var(--accent-mint);">Loading...</div>
+            <div style="font-size:0.6rem; color:#777; letter-spacing:2px; margin-top:5px;">ISLAMIC DATE</div>
         </div>
 
         <div id="zikr" class="container active-section">
-            <p id="active-zikr-text" style="text-align: center; color: var(--accent-lavender); font-size: 1.2rem; font-style: italic;">SubhanAllah</p>
-            <div class="counter-box" onclick="countUp()"><span id="count-num">0</span><small style="color: #444; font-size: 0.65rem; letter-spacing: 2px;">HEARTBEAT OF ZIKR</small></div>
-            <div style="text-align: center;"><button class="nav-btn" style="margin: 0 auto; width: auto; border: 1px solid var(--accent-rose); color: var(--accent-rose); padding: 8px 30px;" onclick="resetCount()">Reset</button></div>
-        </div>
-
-        <div id="essence" class="container">
-            <h2 style="font-family: 'Cinzel'; color: var(--accent-mint);">The Soul's Sanctuary</h2>
-            <div class="library-card" style="border-left: 3px solid var(--accent-mint); cursor: default;">
-                <h3 style="color: var(--accent-mint); font-family: 'Cinzel';">The Heart's Whisper</h3>
-                <p style="font-size: 0.9rem; line-height: 1.7; color: #ccc;">Islam is the softest whisper between you and your Creator. No matter how loud the world gets, you are never truly alone. Worship is the bridge that turns your worries into prayers.</p>
-            </div>
-            <div class="library-card" style="border-left: 3px solid var(--accent-rose); cursor: default;">
-                <h3 style="color: var(--accent-rose); font-family: 'Cinzel';">The Healing in Sujud</h3>
-                <p style="font-size: 0.9rem; line-height: 1.7; color: #ccc;">In Sujud, you are closest to Allah. The weight of the heavens is lifted. It is the only place where whispering to the ground is heard above the seven heavens.</p>
-            </div>
+            <p id="active-zikr-text" style="text-align:center; color:var(--accent-lavender); font-style:italic;">SubhanAllah</p>
+            <div class="counter-box" onclick="countUp()"><span id="count-num">0</span><small style="color:#444; font-size:0.6rem;">COUNT</small></div>
+            <button onclick="resetCount()" style="display:block; margin:auto; background:none; border:1px solid var(--accent-rose); color:var(--accent-rose); padding:5px 20px; border-radius:5px;">Reset</button>
         </div>
 
         <div id="library" class="container">
-            <h2 style="font-family: 'Cinzel'; color: var(--accent-rose);">Dua Library</h2>
-            <div class="library-card" onclick="setDua('SubhanAllah')"><b>SubhanAllah</b><br><small style="color:#777">Glory be to Allah</small></div>
-            <div class="library-card" onclick="setDua('Alhamdulillah')"><b>Alhamdulillah</b><br><small style="color:#777">Praise be to Allah</small></div>
-            <div class="library-card" onclick="setDua('Allahu Akbar')"><b>Allahu Akbar</b><br><small style="color:#777">Allah is Greatest</small></div>
-            <div class="library-card" onclick="setDua('La Ilaha Illallah')"><b>La Ilaha Illallah</b><br><small style="color:#777">There is no God but Allah</small></div>
+            <h3 style="font-family:'Cinzel';">Dua Library</h3>
+            <div class="card" onclick="setDua('SubhanAllah')">SubhanAllah</div>
+            <div class="card" onclick="setDua('Alhamdulillah')">Alhamdulillah</div>
+            <div class="card" onclick="setDua('Allahu Akbar')">Allahu Akbar</div>
+            <div class="card" onclick="setDua('Astaghfirullah')">Astaghfirullah</div>
         </div>
 
-        <div id="quran" class="container"><h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Quran</h2><p style="color:#777">Digital Mushaf coming soon...</p></div>
+        <div id="quran" class="container"><h3 style="font-family:'Cinzel';">Quran</h3><p style="color:#777">Coming Soon</p></div>
     </main>
 
     <script>
         let count = 0;
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); const overlay = document.querySelector('.sidebar-overlay'); overlay.classList.toggle('show'); overlay.style.display = overlay.classList.contains('show') ? 'block' : 'none'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
         function showSection(id) { document.querySelectorAll('.container').forEach(c => c.classList.remove('active-section')); document.getElementById(id).classList.add('active-section'); if(window.innerWidth <= 900) toggleSidebar(); }
         function countUp() { count++; document.getElementById('count-num').innerText = count; if(navigator.vibrate) navigator.vibrate(30); }
         function resetCount() { count = 0; document.getElementById('count-num').innerText = 0; }
         function setDua(txt) { document.getElementById('active-zikr-text').innerText = txt; showSection('zikr'); resetCount(); }
-        function updateLiveInfo() {
+        
+        function updateDate() {
             const today = new Date();
             const options = { calendar: 'islamic-uma', day: 'numeric', month: 'long', year: 'numeric' };
             document.getElementById('hijri-date').innerText = new Intl.DateTimeFormat('en-u-ca-islamic-uma', options).format(today);
-            const eidDate = new Date("March 30, 2026 00:00:00").getTime();
-            const now = new Date().getTime();
-            const gap = eidDate - now;
-            if (gap > 0) {
-                const d = Math.floor(gap / 86400000); const h = Math.floor((gap % 86400000) / 3600000); const m = Math.floor((gap % 3600000) / 60000);
-                document.getElementById("timer").innerText = `${d}d : ${h}h : ${m}m`;
-            } else { document.getElementById("timer").innerText = "Eid Mubarak!"; }
         }
-        updateLiveInfo(); setInterval(updateLiveInfo, 60000);
-        function shareApp() { const text = "Try SoulSync! 🌙 Your spiritual sanctuary: " + window.location.href; if (navigator.share) navigator.share({ title: 'SoulSync', text: text, url: window.location.href }); else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`); }
+        updateDate();
     </script>
 </body>
 </html>
