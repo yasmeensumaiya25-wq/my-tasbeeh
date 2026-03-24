@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SoulSync | Zikr & Quran</title>
-    <link rel="apple-touch-icon" href="logo.png">
-<link rel="icon" type="image/png" href="logo.png">
     
+    <link rel="apple-touch-icon" href="logo.png.jpg">
+    <link rel="icon" type="image/png" href="logo.png.jpg">
+
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -21,104 +22,113 @@
             --glass: rgba(255, 255, 255, 0.08);
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             margin: 0; background-color: var(--bg); color: var(--text-main);
-            font-family: 'Poppins', sans-serif; display: flex; min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif; min-height: 100vh;
+            display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* --- PASTEL GLOWING LANTERNS --- */
+        /* --- CLASSIC FLOATING LANTERNS --- */
         .lantern-container {
-            position: fixed; top: 0; width: 100%; height: 200px;
+            position: fixed; top: 0; width: 100%; height: 150px;
             pointer-events: none; z-index: 5; display: flex; justify-content: space-around;
         }
         .lantern {
-            width: 35px; height: 55px; background: var(--color);
+            width: 25px; height: 40px; background: var(--color);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            box-shadow: 0 0 25px var(--color); animation: sway 4s ease-in-out infinite;
-            position: relative; opacity: 0.7;
+            box-shadow: 0 0 15px var(--color); animation: sway 4s ease-in-out infinite;
+            position: relative; opacity: 0.6;
         }
         .lantern::before {
-            content: ""; position: absolute; top: -50px; left: 50%;
-            width: 1px; height: 50px; background: #333;
+            content: ""; position: absolute; top: -40px; left: 50%;
+            width: 1px; height: 40px; background: rgba(255,255,255,0.2);
         }
         @keyframes sway { 
-            0%, 100% { transform: rotate(-4deg); transform-origin: top; }
-            50% { transform: rotate(4deg); transform-origin: top; }
+            0%, 100% { transform: rotate(-3deg); transform-origin: top; }
+            50% { transform: rotate(3deg); transform-origin: top; }
         }
+
+        /* --- MOBILE HEADER --- */
+        .mobile-header {
+            display: none; padding: 15px 20px; background: var(--sidebar-bg);
+            justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass); position: sticky; top: 0; z-index: 100;
+        }
+        .menu-toggle { font-size: 1.5rem; background: none; border: none; color: var(--accent-mint); cursor: pointer; }
 
         /* --- SIDEBAR --- */
         #sidebar {
-            width: 260px; background: var(--sidebar-bg); height: 100vh;
-            position: fixed; left: 0; top: 0; padding: 40px 20px;
-            border-right: 1px solid var(--glass); display: flex; flex-direction: column; gap: 15px;
+            width: 280px; background: var(--sidebar-bg); height: 100vh;
+            position: fixed; left: 0; top: 0; padding: 40px 25px;
+            border-right: 1px solid var(--glass); display: flex; flex-direction: column; gap: 12px;
+            z-index: 1000; transition: transform 0.3s ease;
         }
-        .logo-area {
-            text-align: center; margin-bottom: 30px; border-bottom: 1px solid var(--glass); padding-bottom: 20px;
-        }
-        .moon-logo { font-size: 2.8rem; color: var(--accent-rose); filter: drop-shadow(0 0 10px var(--accent-rose)); }
-        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.7rem; color: var(--accent-mint); letter-spacing: 2px; display: block; margin-top: 10px; }
+        .logo-area { text-align: center; margin-bottom: 30px; border-bottom: 1px solid var(--glass); padding-bottom: 20px; }
+        .moon-logo { font-size: 2.5rem; color: var(--accent-rose); filter: drop-shadow(0 0 8px var(--accent-rose)); }
+        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.5rem; color: var(--accent-mint); letter-spacing: 2px; display: block; margin-top: 10px; }
 
         .nav-btn {
             background: none; border: 1px solid transparent; color: var(--text-main);
-            padding: 14px 18px; text-align: left; font-size: 0.95rem; cursor: pointer;
-            border-radius: 15px; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+            padding: 14px 18px; text-align: left; font-size: 0.9rem; cursor: pointer;
+            border-radius: 12px; transition: 0.3s; display: flex; align-items: center; gap: 12px; width: 100%;
         }
         .nav-btn:hover { background: var(--glass); border-color: var(--accent-mint); color: var(--accent-mint); }
 
         /* --- MAIN CONTENT --- */
-        #main-content { margin-left: 260px; flex: 1; padding: 50px; position: relative; }
-        .container { display: none; max-width: 750px; margin: 0 auto; animation: fadeInUp 0.7s ease-out; }
+        #main-content { margin-left: 280px; flex: 1; padding: 60px 20px; transition: 0.3s; }
+        .container { display: none; max-width: 600px; margin: 0 auto; animation: fadeIn 0.5s ease; }
         .active-section { display: block; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- COUNTER --- */
+        /* --- TASBEEH COUNTER --- */
         .counter-box {
-            background: #141920;
-            width: 280px; height: 280px; border-radius: 50%; margin: 40px auto;
-            border: 3px solid var(--accent-lavender); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: 0 0 30px rgba(224, 187, 228, 0.15); transition: 0.2s;
+            background: radial-gradient(circle, #1a1f26 0%, #0d1117 100%);
+            width: min(75vw, 280px); height: min(75vw, 280px); border-radius: 50%; 
+            margin: 50px auto; border: 2px solid var(--accent-lavender); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(224, 187, 228, 0.1);
+            transition: transform 0.1s;
         }
-        .counter-box:active { transform: scale(0.93); border-color: var(--accent-mint); }
-        #count-num { font-size: 5.5rem; font-family: 'Cinzel'; color: var(--accent-mint); text-shadow: 0 0 10px rgba(178, 216, 216, 0.3); }
+        .counter-box:active { transform: scale(0.95); }
+        #count-num { font-size: 4.5rem; font-family: 'Cinzel'; color: var(--accent-mint); }
 
-        /* --- CARDS & LISTS --- */
-        .library-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* --- ESSENCE & LIBRARY LISTS --- */
+        .library-grid { display: flex; flex-direction: column; gap: 12px; }
         .library-card {
-            background: var(--glass); padding: 18px; border-radius: 15px; border: 1px solid #222;
-            cursor: pointer; transition: 0.3s;
+            background: #161b22; padding: 25px; border-radius: 15px;
+            border: 1px solid var(--glass); cursor: pointer; transition: 0.2s;
         }
-        .library-card:hover { border-color: var(--accent-rose); transform: translateY(-3px); }
+        .library-card:hover { border-color: var(--accent-rose); transform: translateY(-2px); }
+        .card-title { font-family: 'Cinzel'; font-size: 1.1rem; margin-top: 0; margin-bottom: 10px; }
+        .card-text { font-size: 0.9rem; color: #bbb; line-height: 1.6; }
 
-        .quran-container { background: #12151A; padding: 25px; border-radius: 20px; border: 1px solid var(--glass); }
-        .arabic-text { font-family: 'Amiri'; font-size: 1.9rem; text-align: right; color: var(--accent-mint); line-height: 2.8; margin-bottom: 10px; }
-        
-        select { 
-            width: 100%; background: #080A0D; color: var(--accent-rose); 
-            border: 1px solid var(--glass); padding: 15px; border-radius: 12px; margin-bottom: 25px; outline: none;
-        }
-        
-        .reset-btn {
-            background: var(--glass); border: 1px solid var(--accent-rose); color: var(--accent-rose);
-            padding: 8px 25px; border-radius: 20px; cursor: pointer; margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            #sidebar { width: 80px; padding: 20px 10px; }
-            .sidebar-brand, .nav-btn span { display: none; }
-            #main-content { margin-left: 80px; padding: 20px; }
-            .library-grid { grid-template-columns: 1fr; }
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .mobile-header { display: flex; }
+            #sidebar { transform: translateX(-100%); width: 260px; }
+            #sidebar.open { transform: translateX(0); }
+            #main-content { margin-left: 0; padding: 40px 15px; }
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; }
+            .sidebar-overlay.show { display: block; }
         }
     </style>
 </head>
 <body>
 
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <header class="mobile-header">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <span style="font-family: 'Cinzel'; color: var(--accent-mint); letter-spacing: 1px;">SoulSync</span>
+        <div style="width: 24px;"></div>
+    </header>
+
     <div class="lantern-container">
-        <div class="lantern" style="--color: var(--accent-mint); margin-top: 10px;"></div>
-        <div class="lantern" style="--color: var(--accent-rose); margin-top: 40px;"></div>
-        <div class="lantern" style="--color: var(--accent-lavender); margin-top: 20px;"></div>
-        <div class="lantern" style="--color: var(--accent-mint); margin-top: 50px;"></div>
+        <div class="lantern" style="--color: var(--accent-mint); margin-top: 5px;"></div>
+        <div class="lantern" style="--color: var(--accent-rose); margin-top: 25px;"></div>
+        <div class="lantern" style="--color: var(--accent-lavender); margin-top: 15px;"></div>
     </div>
 
     <aside id="sidebar">
@@ -126,159 +136,122 @@
             <span class="moon-logo">🌙</span>
             <span class="sidebar-brand">SoulSync</span>
         </div>
-        <button class="nav-btn" onclick="showSection('zikr')">💠 <span>Zikr Counter</span></button>
+        <button class="nav-btn" onclick="showSection('zikr')">💠 <span>Tasbeeh</span></button>
+        <button class="nav-btn" onclick="showSection('essence')">📖 <span>Essence of Islam</span></button>
         <button class="nav-btn" onclick="showSection('library')">🌸 <span>Dua Library</span></button>
-        <button class="nav-btn" onclick="showSection('quran')">🌿 <span>Noble Quran</span></button>
-        <button class="nav-btn" onclick="showSection('hadith')">✨ <span>Daily Hadith</span></button>
-        <button class="nav-btn" onclick="showSection('stats')">📈 <span>Progress</span></button>
+        <button class="nav-btn" onclick="showSection('quran')">🌿 <span>Quran Majeed</span></button>
+        <button class="nav-btn" onclick="showSection('stats')">📈 <span>My Progress</span></button>
+        
+        <button class="nav-btn" style="margin-top: auto; border-top: 1px solid var(--glass); padding-top: 20px; color: var(--accent-mint);" onclick="shareApp()">
+            📲 <span>Share SoulSync</span>
+        </button>
     </aside>
 
     <main id="main-content">
         <div id="zikr" class="container active-section">
-            <h1 style="text-align:center; color: var(--accent-mint); font-family: 'Cinzel';">Tasbeeh</h1>
-            <p id="active-zikr-text" style="text-align: center; color: var(--accent-lavender); font-style: italic; letter-spacing: 1px;">SubhanAllah</p>
+            <p id="active-zikr-text" style="text-align: center; color: var(--accent-lavender); font-size: 1.2rem; font-style: italic;">SubhanAllah</p>
             <div class="counter-box" onclick="countUp()">
                 <span id="count-num">0</span>
-                <small style="color: #555; font-size: 0.7rem;">TAP CIRCLE</small>
+                <small style="color: #444; font-size: 0.7rem; letter-spacing: 2px;">TAP TO REMEMBER</small>
             </div>
             <div style="text-align: center;">
-                <button class="reset-btn" onclick="resetCount()">Reset Counter</button>
+                <button class="nav-btn" style="margin: 0 auto; width: auto; border: 1px solid var(--accent-rose); color: var(--accent-rose); padding: 8px 30px;" onclick="resetCount()">Reset</button>
+            </div>
+        </div>
+
+        <div id="essence" class="container">
+            <h2 style="font-family: 'Cinzel'; color: var(--accent-mint); margin-bottom: 25px;">The Beauty of Worship</h2>
+            <div class="library-grid">
+                <div class="library-card" style="border-left: 3px solid var(--accent-mint);">
+                    <h3 class="card-title" style="color: var(--accent-mint);">The Heart's Peace</h3>
+                    <p class="card-text">"Verily, in the remembrance of Allah do hearts find rest." (13:28). Zikr is the light that clears the darkness of stress and heals the soul.</p>
+                </div>
+                <div class="library-card" style="border-left: 3px solid var(--accent-rose);">
+                    <h3 class="card-title" style="color: var(--accent-rose);">The Mercy of Salah</h3>
+                    <p class="card-text">Salah is a gift—five moments where you drop the heavy world and breathe in the presence of the King of Kings.</p>
+                </div>
+                <div class="library-card" style="border-left: 3px solid var(--accent-lavender);">
+                    <h3 class="card-title" style="color: var(--accent-lavender);">Spirit of Excellence</h3>
+                    <p class="card-text">Islam is beauty. To worship Allah as if you see Him (Ihsan) makes every small act, even a smile, a sacred deed.</p>
+                </div>
             </div>
         </div>
 
         <div id="library" class="container">
-            <h2 style="color: var(--accent-rose); font-family: 'Cinzel'; margin-bottom: 25px;">Dua Library</h2>
+            <h2 style="font-family: 'Cinzel'; color: var(--accent-rose); margin-bottom: 25px;">Dua Library</h2>
             <div class="library-grid">
-                <div class="library-card" onclick="setDua('SubhanAllah', 'Glory be to Allah')"><b style="color:var(--accent-mint)">SubhanAllah</b><br><small style="color:#999">Glory be to Allah</small></div>
-                <div class="library-card" onclick="setDua('Alhamdulillah', 'Praise be to Allah')"><b style="color:var(--accent-mint)">Alhamdulillah</b><br><small style="color:#999">Praise be to Allah</small></div>
-                <div class="library-card" onclick="setDua('Allahu Akbar', 'Allah is Greatest')"><b style="color:var(--accent-mint)">Allahu Akbar</b><br><small style="color:#999">Allah is Greatest</small></div>
-                <div class="library-card" onclick="setDua('Astaghfirullah', 'I seek forgiveness')"><b style="color:var(--accent-rose)">Astaghfirullah</b><br><small style="color:#999">Seeking Forgiveness</small></div>
-                <div class="library-card" onclick="setDua('La hawla wa la...', 'Trust in Power')"><b style="color:var(--accent-lavender)">Hawqala</b><br><small style="color:#999">No power but Allah</small></div>
-                <div class="library-card" onclick="setDua('SubhanAllahi wa bihamdihi', 'Infinite Praise')"><b style="color:var(--accent-mint)">Tasbih & Hamd</b><br><small style="color:#999">Heaviness in Scales</small></div>
-                <div class="library-card" onclick="setDua('Hasbunallahu wa...', 'Allah is Sufficient')"><b style="color:var(--accent-rose)">Hasbunallah</b><br><small style="color:#999">Protection & Trust</small></div>
-                <div class="library-card" onclick="setDua('Allahumma salli...', 'Blessings on Prophet')"><b style="color:var(--accent-lavender)">Durood Sharif</b><br><small style="color:#999">Sending Salawat</small></div>
+                <div class="library-card" onclick="setDua('SubhanAllah')"><b style="color:var(--accent-mint)">SubhanAllah</b><br><small style="color:#777">Glory be to Allah</small></div>
+                <div class="library-card" onclick="setDua('Alhamdulillah')"><b style="color:var(--accent-mint)">Alhamdulillah</b><br><small style="color:#777">Praise be to Allah</small></div>
+                <div class="library-card" onclick="setDua('Allahu Akbar')"><b style="color:var(--accent-mint)">Allahu Akbar</b><br><small style="color:#777">Allah is Greatest</small></div>
+                <div class="library-card" onclick="setDua('Astaghfirullah')"><b style="color:var(--accent-rose)">Astaghfirullah</b><br><small style="color:#777">I seek forgiveness</small></div>
             </div>
         </div>
 
         <div id="quran" class="container">
-            <h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Quran Majeed</h2>
-            <div class="quran-container">
-                <select id="surahSelect" onchange="loadSurah()">
-                    <option>Loading Surahs...</option>
-                </select>
-                <audio id="misharyVoice" controls style="width: 100%; margin-bottom: 25px; filter: invert(100%) opacity(0.8);"></audio>
-                <div id="quran-text-display" style="max-height: 450px; overflow-y: auto;"></div>
-            </div>
-        </div>
-
-        <div id="hadith" class="container">
-            <h2 style="color: var(--accent-mint); font-family: 'Cinzel';">Sahih Bukhari</h2>
-            <div style="background: var(--glass); padding: 35px; border-radius: 20px; border-left: 4px solid var(--accent-mint);">
-                <p id="h-text" style="line-height: 1.8;">Loading daily wisdom...</p>
-                <p id="h-ref" style="color: var(--accent-rose); font-size: 0.85rem; margin-top: 20px; font-weight: 600;"></p>
-            </div>
-            <button class="nav-btn" style="margin-top: 25px; width: 100%; justify-content: center; border: 1px solid #333;" onclick="fetchHadith()">New Hadith</button>
+            <h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Noble Quran</h2>
+            <p style="color: #777;">Feature loading soon...</p>
         </div>
 
         <div id="stats" class="container">
-            <h2 style="color: var(--accent-rose); font-family: 'Cinzel';">Personal Stats</h2>
-            <div style="background: #12151A; padding: 25px; border-radius: 20px;">
-                <canvas id="lineChart"></canvas>
-            </div>
+            <h2 style="color: var(--accent-rose); font-family: 'Cinzel';">Progress</h2>
+            <canvas id="lineChart" style="background: #12151A; padding: 20px; border-radius: 15px;"></canvas>
         </div>
     </main>
 
     <script>
         let count = 0;
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('show');
+        }
+
         function showSection(id) {
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
-            if(id === 'stats') renderStats();
+            if(window.innerWidth <= 900) toggleSidebar();
         }
 
         function countUp() {
             count++;
             document.getElementById('count-num').innerText = count;
-            if(navigator.vibrate) navigator.vibrate(30);
+            if(navigator.vibrate) navigator.vibrate(40);
         }
 
         function resetCount() { count = 0; document.getElementById('count-num').innerText = 0; }
 
-        function setDua(txt, trans) {
+        function setDua(txt) {
             document.getElementById('active-zikr-text').innerText = txt;
             showSection('zikr');
             resetCount();
         }
 
-        async function initApp() {
-            const res = await fetch('https://api.alquran.cloud/v1/surah');
-            const data = await res.json();
-            const select = document.getElementById('surahSelect');
-            select.innerHTML = '<option>Select a Surah</option>';
-            data.data.forEach(s => {
-                let opt = document.createElement('option');
-                opt.value = s.number;
-                opt.text = s.number + ". " + s.englishName;
-                select.add(opt);
-            });
-            fetchHadith();
-        }
-
-        async function loadSurah() {
-            const id = document.getElementById('surahSelect').value;
-            const display = document.getElementById('quran-text-display');
-            const audio = document.getElementById('misharyVoice');
-            display.innerHTML = "Opening the Book of Allah...";
-            audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-            const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad`);
-            const data = await res.json();
-            display.innerHTML = '';
-            data.data[0].ayahs.forEach((a, i) => {
-                display.innerHTML += `
-                    <div style="margin-bottom: 30px;">
-                        <div class="arabic-text">${a.text}</div>
-                        <div style="color: #777; font-size: 0.95rem; text-align: left;">${data.data[1].ayahs[i].text}</div>
-                    </div>`;
-            });
-        }
-
-        async function fetchHadith() {
-            const hText = document.getElementById('h-text');
-            const hRef = document.getElementById('h-ref');
-            try {
-                const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/');
-                const data = await res.json();
-                hText.innerText = data.data.hadith_english;
-                hRef.innerText = data.data.header;
-            } catch(e) {
-                hText.innerText = "Actions are judged by intentions.";
-                hRef.innerText = "Sahih Al-Bukhari";
+        function shareApp() {
+            const shareText = "Try SoulSync! 🌙 A beautiful, dark-themed Zikr app for your spiritual routine. Open it here: ";
+            const shareUrl = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: 'SoulSync', text: shareText, url: shareUrl }).catch(console.error);
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareText + shareUrl)}`, '_blank');
             }
         }
 
-        function renderStats() {
-            const ctx = document.getElementById('lineChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                    datasets: [{
-                        label: 'Zikr',
-                        data: [1500, 2300, 1900, 3100, 2700],
-                        borderColor: '#FFD1DC',
-                        backgroundColor: 'rgba(255, 209, 220, 0.1)',
-                        fill: true, tension: 0.3
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: { y: { display: false }, x: { ticks: { color: '#B2D8D8' } } }
-                }
-            });
-        }
-
-        initApp();
+        // Initialize Stats Chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                datasets: [{
+                    label: 'Zikr',
+                    data: [120, 450, 300, 700, 500],
+                    borderColor: '#FFD1DC',
+                    backgroundColor: 'rgba(255, 209, 220, 0.1)',
+                    fill: true, tension: 0.3
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { ticks: { color: '#B2D8D8' } } } }
+        });
     </script>
 </body>
 </html>
