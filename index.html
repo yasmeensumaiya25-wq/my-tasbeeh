@@ -1,198 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noor | Islamic Digital Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <title>SoulSync | Digital Tasbeeh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Quicksand&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --pastel-blue: #a2d2ff;
-            --pastel-pink: #ffafcc;
-            --pastel-green: #b9fbc0;
-            --pastel-purple: #cdb4db;
-            --text-main: #e0e0e0;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --pink: #ffafcc;
+            --blue: #a2d2ff;
+            --green: #b9fbc0;
+            --purple: #cdb4db;
+            --text: #e0e0e0;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Quicksand', sans-serif;
             margin: 0;
             display: flex;
         }
 
-        /* Sidebar */
-        nav {
-            width: 250px;
-            background: var(--card-bg);
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 220px;
+            background: var(--card);
             height: 100vh;
-            position: fixed;
             padding: 20px;
-            border-right: 1px solid #333;
+            border-right: 2px solid #333;
         }
 
-        nav h1 { font-family: 'Amiri', serif; color: var(--pastel-green); }
+        .sidebar h2 { font-family: 'Amiri', serif; color: var(--green); font-size: 28px; }
 
-        nav ul { list-style: none; padding: 0; }
-        nav li { padding: 15px 0; border-bottom: 1px solid #333; cursor: pointer; transition: 0.3s; }
-        nav li:hover { color: var(--pastel-blue); }
-
-        /* Main Content */
-        main {
-            margin-left: 280px;
-            padding: 40px;
-            width: 100%;
+        .nav-item {
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: 0.3s;
         }
 
-        .section { display: none; }
-        .active { display: block; }
+        .nav-item:hover { background: #333; color: var(--blue); }
 
-        /* Tasbeeh Section */
-        #tasbeeh-container {
-            text-align: center;
-            background: var(--card-bg);
+        /* Main Area */
+        .main-content {
+            flex-grow: 1;
             padding: 50px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
         }
 
-        .fingerprint-area {
-            width: 150px;
-            height: 150px;
-            margin: 30px auto;
-            border: 3px solid var(--pastel-pink);
+        /* Fingerprint Tap Circle */
+        .tap-circle {
+            width: 140px;
+            height: 140px;
+            border: 4px solid var(--pink);
             border-radius: 50%;
+            margin: 30px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
             font-size: 50px;
-            transition: transform 0.1s;
+            cursor: pointer;
+            transition: 0.1s;
             user-select: none;
+            box-shadow: 0 0 15px rgba(255, 175, 204, 0.2);
         }
 
-        .fingerprint-area:active { transform: scale(0.95); background: rgba(255, 175, 204, 0.2); }
+        .tap-circle:active { transform: scale(0.9); background: rgba(255, 175, 204, 0.1); }
 
-        /* Calligraphy Grid */
-        .calligraphy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-        }
-
-        .name-card {
-            background: #2a2a2a;
-            padding: 20px;
-            text-align: center;
-            border-radius: 15px;
-            border: 1px solid var(--pastel-purple);
-        }
-
-        .arabic-text { font-family: 'Amiri', serif; font-size: 24px; color: var(--pastel-blue); }
+        .counter-text { font-size: 70px; margin: 10px 0; color: var(--blue); font-weight: bold; }
 
         /* Buttons */
         .btn {
-            background: var(--pastel-blue);
-            color: #121212;
+            background: var(--purple);
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 20px;
             cursor: pointer;
+            font-weight: bold;
+            font-family: 'Quicksand', sans-serif;
+            margin: 5px;
+        }
+
+        .share-btn { background: var(--blue); margin-top: 20px; width: 100%; }
+
+        /* Audio Player Style */
+        .audio-section {
+            margin-top: 40px;
+            background: var(--card);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid var(--blue);
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <h1>Noor</h1>
-        <p id="hijri-date" style="color: var(--pastel-pink);"></p>
-        <ul>
-            <li onclick="showSection('tasbeeh')">Tasbeeh Counter</li>
-            <li onclick="showSection('quran')">Noble Quran</li>
-            <li onclick="showSection('library')">Dhikr Library</li>
-            <li onclick="showSection('calligraphy')">99 Names Calligraphy</li>
-            <li onclick="showSection('beauty')">Beauty of Islam</li>
-        </ul>
-        <button class="btn" onclick="shareSite()">Share Site</button>
-    </nav>
+    <div class="sidebar">
+        <h2>SoulSync</h2>
+        <p id="date" style="color: var(--pink); font-size: 14px;"></p>
+        <hr style="border: 0.5px solid #333;">
+        <div class="nav-item">Dhikr Counter</div>
+        <div class="nav-item">Quran Library</div>
+        <div class="nav-item">Beauty of Islam</div>
+        <button class="btn share-btn" onclick="share()">Share SoulSync</button>
+    </div>
 
-    <main>
-        <div id="tasbeeh" class="section active">
-            <div id="tasbeeh-container">
-                <h2 style="color: var(--pastel-blue);">Digital Tasbeeh</h2>
-                <h1 id="count" style="font-size: 80px; margin: 10px 0;">0</h1>
-                <div class="fingerprint-area" onclick="increment()">☝️</div>
-                <p>Tap the fingerprint to count</p>
-                <button class="btn" onclick="resetCount()" style="background: var(--pastel-pink);">Reset</button>
-                
-                <div style="margin-top: 40px;">
-                    <h3>Last 5 Days Streak</h3>
-                    <div id="streak-data" style="color: var(--pastel-green);"></div>
-                </div>
-            </div>
+    <div class="main-content">
+        <h3 style="color: var(--green); font-family: 'Amiri', serif; font-size: 24px;">SubhanAllah</h3>
+        <div class="counter-text" id="count">0</div>
+        
+        <div class="tap-circle" onclick="addOne()">☝️</div>
+        
+        <p style="color: #888;">Tap the fingerprint to count your Dhikr</p>
+        <button class="btn" onclick="reset()" style="background: var(--pink);">Reset Counter</button>
+
+        <div class="audio-section">
+            <h4 style="color: var(--blue); margin-top: 0;">Mishary Alafasy Recitation</h4>
+            <audio controls style="width: 100%;">
+                <source src="https://server8.mp3quran.net/afs/001.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p style="font-size: 12px; color: #888; margin-bottom: 0;">Currently Playing: Surah Al-Fatiha</p>
         </div>
 
-        <div id="calligraphy" class="section">
-            <h2 style="color: var(--pastel-purple);">Asmaul Husna Calligraphy</h2>
-            <div class="calligraphy-grid" id="names-list">
-                </div>
+        <div style="margin-top: 30px; background: var(--card); padding: 20px; border-radius: 15px;">
+            <p style="margin-top: 0;"><strong>5-Day Streak Data:</strong></p>
+            <p id="streak" style="color: var(--green); letter-spacing: 5px;">33 • 100 • 33 • 0 • 0</p>
         </div>
-
-        <div id="beauty" class="section">
-            <h2 style="color: var(--pastel-green);">The Beauty of Islam</h2>
-            <blockquote style="font-style: italic; border-left: 4px solid var(--pastel-blue); padding-left: 20px;">
-                "Indeed, in the remembrance of Allah do hearts find rest." (13:28)
-            </blockquote>
-            <p>Islam is a religion of peace, discipline, and profound artistic heritage—from the geometry of its mosques to the rhythm of the Quranic recitation.</p>
-        </div>
-    </main>
+    </div>
 
     <script>
-        // Tasbeeh Logic
-        let count = 0;
-        let history = [120, 300, 45, 500, 33]; // Sample data for 5 days
-
-        function increment() {
-            count++;
-            document.getElementById('count').innerText = count;
-        }
-
-        function resetCount() {
-            count = 0;
-            document.getElementById('count').innerText = count;
-        }
-
-        // Navigation
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        // Hijri Date (Simple approximation or use API)
-        document.getElementById('hijri-date').innerText = new Intl.DateTimeFormat('en-u-ca-islamic-uma', {day:'numeric', month:'long', year:'numeric'}).format(new Date());
-
-        // Calligraphy Generator (Sample)
-        const names = ["Allah", "Ar-Rahman", "Ar-Raheem", "Al-Malik"];
-        const grid = document.getElementById('names-list');
-        names.forEach(name => {
-            grid.innerHTML += `<div class="name-card"><div class="arabic-text">${name}</div><button class="btn" style="font-size:10px; margin-top:10px;">Download</button></div>`;
-        });
-
-        // Share Function
-        function shareSite() {
-            if (navigator.share) {
-                navigator.share({ title: 'Noor Islamic App', url: window.location.href });
-            } else {
-                alert("Copied link to clipboard!");
-            }
-        }
+        let total = 0;
         
-        // Render Streak
-        document.getElementById('streak-data').innerText = history.join(" dhikrs → ");
+        function addOne() {
+            total++;
+            document.getElementById('count').innerText = total;
+        }
+
+        function reset() {
+            total = 0;
+            document.getElementById('count').innerText = total;
+        }
+
+        function share() {
+            alert("SoulSync link copied to clipboard!");
+        }
+
+        // Set the Hijri Date automatically
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('date').innerText = new Intl.DateTimeFormat('en-u-ca-islamic-uma', options).format(new Date());
     </script>
+
 </body>
 </html>
