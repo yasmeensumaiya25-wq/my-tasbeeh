@@ -3,276 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoulSync | Digital Tasbeeh & Quran</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <title>SoulSync - Islamic Dashboard</title>
     <style>
         :root {
-            --bg: #0D1117;
-            --sidebar-bg: #161B22;
-            --accent-mint: #B2D8D8;
-            --accent-rose: #FFD1DC;
-            --accent-lavender: #E0BBE4;
-            --text-main: #F0F6FC;
-            --glass: rgba(255, 255, 255, 0.05);
+            --sidebar-bg: #1e293b;
+            --main-bg: #0f172a;
+            --card-bg: #1e293b;
+            --pastel-blue: #bae6fd;
+            --pastel-green: #bbf7d0;
+            --pastel-pink: #fbcfe8;
+            --pastel-yellow: #fef08a;
+            --pastel-purple: #e9d5ff;
+            --text-main: #f1f5f9;
+            --sidebar-width: 260px;
         }
 
         body {
-            margin: 0; background-color: var(--bg); color: var(--text-main);
-            font-family: 'Poppins', sans-serif; display: flex; min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* --- HANGING LANTERNS --- */
-        .lantern-container {
-            position: fixed; top: 0; width: 100%; height: 200px;
-            pointer-events: none; z-index: 5; display: flex; justify-content: space-around;
-        }
-        .lantern {
-            width: 40px; height: 60px; background: var(--accent-mint);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            box-shadow: 0 0 20px var(--accent-mint); animation: sway 4s ease-in-out infinite;
-            position: relative; opacity: 0.6;
-        }
-        .lantern::before {
-            content: ""; position: absolute; top: -50px; left: 50%;
-            width: 2px; height: 50px; background: #444;
-        }
-        @keyframes sway { 
-            0%, 100% { transform: rotate(-5deg); transform-origin: top; }
-            50% { transform: rotate(5deg); transform-origin: top; }
+            background-color: var(--main-bg);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
         }
 
         /* --- SIDEBAR --- */
-        #sidebar {
-            width: 260px; background: var(--sidebar-bg); height: 100vh;
-            position: fixed; left: 0; top: 0; padding: 40px 20px;
-            border-right: 1px solid var(--glass); display: flex; flex-direction: column; gap: 20px;
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            position: fixed;
+            height: 100vh;
+            box-sizing: border-box;
         }
-        .logo-area {
-            text-align: center; margin-bottom: 40px; border-bottom: 1px solid var(--glass); padding-bottom: 20px;
-        }
-        .moon-logo { font-size: 3rem; color: var(--accent-rose); display: block; margin-bottom: 10px; }
-        .sidebar-brand { font-family: 'Cinzel'; font-size: 1.8rem; color: var(--accent-mint); letter-spacing: 2px; }
 
-        .nav-btn {
-            background: none; border: 1px solid transparent; color: var(--text-main);
-            padding: 12px 20px; text-align: left; font-size: 1rem; cursor: pointer;
-            border-radius: 12px; transition: 0.3s;
+        .brand-name {
+            font-size: 2rem;
+            color: var(--pastel-blue);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
         }
-        .nav-btn:hover { background: var(--glass); border-color: var(--accent-mint); color: var(--accent-mint); }
+
+        .sidebar-quote {
+            font-size: 0.85rem;
+            color: var(--pastel-pink);
+            font-style: italic;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            margin-top: 50px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--pastel-purple);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
 
         /* --- MAIN CONTENT --- */
-        #main-content { margin-left: 260px; flex: 1; padding: 40px; position: relative; }
-
-        .container { display: none; max-width: 800px; margin: 0 auto; animation: fadeInUp 0.6s ease; }
-        .active-section { display: block; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- TASBEEH COUNTER --- */
-        .counter-box {
-            background: radial-gradient(circle, #1c2128 0%, #0d1117 100%);
-            width: 300px; height: 300px; border-radius: 50%; margin: 50px auto;
-            border: 2px solid var(--accent-mint); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: 0 0 40px rgba(178, 216, 216, 0.1); transition: 0.1s;
-        }
-        .counter-box:active { transform: scale(0.95); box-shadow: 0 0 60px rgba(178, 216, 216, 0.3); }
-        #count-num { font-size: 6rem; font-family: 'Cinzel'; color: var(--accent-rose); }
-
-        /* --- LIBRARY CARDS --- */
-        .library-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .library-card {
-            background: var(--glass); padding: 15px; border-radius: 12px; border: 1px solid #333;
-            cursor: pointer; transition: 0.3s;
-        }
-        .library-card:hover { border-color: var(--accent-rose); background: rgba(255, 209, 220, 0.05); }
-
-        /* --- QURAN BOX --- */
-        .quran-container { background: var(--sidebar-bg); padding: 25px; border-radius: 20px; border: 1px solid var(--glass); }
-        .arabic-text { font-family: 'Amiri'; font-size: 1.8rem; text-align: right; color: var(--accent-mint); line-height: 2.5; }
-        select { 
-            width: 100%; background: #0D1117; color: var(--accent-rose); 
-            border: 1px solid var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 20px;
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .hijri-date {
+            color: var(--pastel-yellow);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        select, .btn {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-main);
+            padding: 14px;
+            border-radius: 15px;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .btn-reset {
+            background: var(--pastel-green);
+            color: #064e3b;
+            font-weight: bold;
+            border: none;
+        }
+
+        /* --- TASBEEH --- */
+        #tasbeeh-display {
+            font-size: 6rem;
+            text-align: center;
+            color: var(--pastel-green);
+            margin: 20px 0;
+            cursor: pointer;
+            font-weight: 200;
+            transition: transform 0.1s ease;
+        }
+        #tasbeeh-display:active { transform: scale(0.95); }
+
+        /* --- QURAN PLAYER --- */
+        .quran-text { color: var(--pastel-blue); text-align: right; font-size: 1.8rem; margin: 20px 0; line-height: 1.8; }
+        .translation { color: #94a3b8; font-style: italic; font-size: 0.9rem; }
+        audio { width: 100%; margin-top: 20px; filter: invert(0.8) hue-rotate(180deg); }
+
+        /* --- STREAK --- */
+        .streak-container { display: flex; justify-content: space-between; align-items: flex-end; height: 100px; margin-top: 20px; }
+        .bar { width: 15%; background: var(--pastel-purple); border-radius: 8px; position: relative; min-height: 10%; }
+        .bar-label { position: absolute; top: -25px; width: 100%; text-align: center; font-size: 0.75rem; color: var(--pastel-yellow); }
+        .day-name { text-align: center; font-size: 0.7rem; color: #64748b; margin-top: 10px; }
+
+        /* --- MOBILE ADAPTATION --- */
         @media (max-width: 768px) {
-            #sidebar { width: 70px; padding: 20px 5px; }
-            .sidebar-brand, .nav-btn span { display: none; }
-            #main-content { margin-left: 70px; padding: 15px; }
-            .library-grid { grid-template-columns: 1fr; }
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+            .main-content { margin-left: 0; padding: 20px; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="lantern-container">
-        <div class="lantern" style="margin-top: 20px; --accent-mint: var(--accent-rose);"></div>
-        <div class="lantern" style="margin-top: 50px;"></div>
-        <div class="lantern" style="margin-top: 30px; --accent-mint: var(--accent-lavender);"></div>
+<aside class="sidebar">
+    <div class="brand-name">SoulSync</div>
+    <div class="sidebar-quote">"The heart that remembers the Creator finds the peace it was searching for."</div>
+    
+    <ul class="nav-links">
+        <li>Dashboard</li>
+        <li>Quran Library</li>
+        <li>Tasbeeh</li>
+        <li>Spiritual Insights</li>
+    </ul>
+</aside>
+
+<main class="main-content">
+    <div class="container">
+        <header>
+            <div class="hijri-date" id="hijri-display">Loading...</div>
+        </header>
+
+        <section class="card">
+            <h3 style="color: var(--pastel-pink); margin-top:0;">Daily Dhikr</h3>
+            <select id="dhikr-selector">
+                <option value="SubhanAllah">SubhanAllah</option>
+                <option value="Alhamdulillah">Alhamdulillah</option>
+                <option value="Allahu Akbar">Allahu Akbar</option>
+                <option value="La ilaha illallah">La ilaha illallah</option>
+                <option value="Astaghfirullah">Astaghfirullah</option>
+                <option value="Subhanallahi wa bihamdihi">Subhanallahi wa bihamdihi</option>
+                <option value="La hawla wala quwwata">La hawla wala quwwata illa billah</option>
+                <option value="Hasbunallahu wa ni'mal wakil">Hasbunallahu wa ni'mal wakil</option>
+                <option value="Allahumma salli ala Muhammad">Salawat</option>
+                <option value="Subhanallahi al-azim">Subhanallahi al-azim</option>
+            </select>
+            <div id="tasbeeh-display">0</div>
+            <button class="btn btn-reset" onclick="resetCounter()">Reset Tap</button>
+        </section>
+
+        <section class="card">
+            <h3 style="color: var(--pastel-yellow); margin-top:0;">Dhikr Streak (Last 5 Days)</h3>
+            <div class="streak-container" id="streak-bars"></div>
+            <div style="display: flex; justify-content: space-between;" id="streak-labels"></div>
+        </section>
+
+        <section class="card">
+            <h3 style="color: var(--pastel-purple); margin-top:0;">Quran Library (Mishary Alafasy)</h3>
+            <select id="surah-selector" onchange="fetchSurah(this.value)">
+                <option value="">Select a Surah...</option>
+            </select>
+            <div id="quran-display" style="display: none;">
+                <div class="quran-text" id="q-arabic">---</div>
+                <div class="translation" id="q-trans">---</div>
+                <audio id="quran-audio" controls></audio>
+            </div>
+        </section>
+
+        <section class="card" style="border-left: 4px solid var(--pastel-green);">
+            <h3 style="color: var(--pastel-green); margin-top:0;">The Beauty of Islam</h3>
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #cbd5e1;">
+                Islam is a sanctuary for the restless mind. It teaches us that through gratitude (Shukr) and constant remembrance (Dhikr), we can turn every hardship into a bridge toward spiritual elevation.
+            </p>
+            <button class="btn" onclick="shareSite()" style="margin-top:10px; border-color: var(--pastel-blue); color: var(--pastel-blue);">Share Your Progress</button>
+        </section>
     </div>
+</main>
 
-    <aside id="sidebar">
-        <div class="logo-area">
-            <span class="moon-logo">🌙</span>
-            <span class="sidebar-brand">SoulSync</span>
-        </div>
-        <button class="nav-btn" onclick="showSection('zikr')">✨ <span>Zikr Counter</span></button>
-        <button class="nav-btn" onclick="showSection('library')">📚 <span>Dua Library</span></button>
-        <button class="nav-btn" onclick="showSection('quran')">📖 <span>Noble Quran</span></button>
-        <button class="nav-btn" onclick="showSection('hadith')">📜 <span>Daily Hadith</span></button>
-        <button class="nav-btn" onclick="showSection('stats')">📊 <span>Your Streak</span></button>
-    </aside>
+<script>
+    // --- HIJRI DATE ---
+    const hDate = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {day:'numeric', month:'long', year:'numeric'}).format(new Date());
+    document.getElementById('hijri-display').innerText = hDate;
 
-    <main id="main-content">
-        <div id="zikr" class="container active-section">
-            <h1 style="text-align:center; color: var(--accent-mint); font-family: 'Cinzel';">Tasbeeh</h1>
-            <p id="active-zikr-text" style="text-align: center; color: var(--accent-rose); font-style: italic;">SubhanAllah</p>
-            <div class="counter-box" onclick="countUp()">
-                <span id="count-num">0</span>
-                <small style="letter-spacing: 3px; color: #666;">TAP SPACE</small>
-            </div>
-            <div style="text-align: center;">
-                <button class="nav-btn" style="border: 1px solid #333;" onclick="resetCount()">Reset</button>
-            </div>
-        </div>
+    // --- TASBEEH LOGIC ---
+    let count = 0;
+    const display = document.getElementById('tasbeeh-display');
+    display.addEventListener('click', () => {
+        count++;
+        display.innerText = count;
+        updateStreak(1);
+    });
+    function resetCounter() { count = 0; display.innerText = count; }
 
-        <div id="library" class="container">
-            <h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Expanded Library</h2>
-            <div class="library-grid">
-                <div class="library-card" onclick="setDua('SubhanAllah', 'Glory be to Allah')"><b>SubhanAllah</b><br><small>Glory be to Allah</small></div>
-                <div class="library-card" onclick="setDua('Alhamdulillah', 'Praise be to Allah')"><b>Alhamdulillah</b><br><small>All Praise is for Allah</small></div>
-                <div class="library-card" onclick="setDua('Allahu Akbar', 'Allah is Greatest')"><b>Allahu Akbar</b><br><small>Allah is Greatest</small></div>
-                <div class="library-card" onclick="setDua('Astaghfirullah', 'I seek forgiveness')"><b>Astaghfirullah</b><br><small>Seeking Forgiveness</small></div>
-                <div class="library-card" onclick="setDua('La hawla wa la...', 'No power but Allah')"><b>Hawqala</b><br><small>Trust in Allah's Might</small></div>
-                <div class="library-card" onclick="setDua('SubhanAllahi wa bihamdihi', 'Glory & Praise')"><b>Tasbih & Hamd</b><br><small>Infinite Rewards</small></div>
-                <div class="library-card" onclick="setDua('Hasbunallahu wa...', 'Allah is sufficient')"><b>Hasbunallah</b><br><small>Protection from Worry</small></div>
-                <div class="library-card" onclick="setDua('Allahumma salli...', 'Blessings on Prophet')"><b>Durood Sharif</b><br><small>Sending Blessings</small></div>
-            </div>
-        </div>
+    // --- STREAK STORAGE ---
+    function updateStreak(inc) {
+        const today = new Date().toISOString().split('T')[0];
+        let logs = JSON.parse(localStorage.getItem('ss_logs') || '{}');
+        logs[today] = (logs[today] || 0) + inc;
+        localStorage.setItem('ss_logs', JSON.stringify(logs));
+        renderStreak();
+    }
 
-        <div id="quran" class="container">
-            <h2 style="color: var(--accent-mint); font-family: 'Cinzel';">The Noble Quran</h2>
-            <div class="quran-container">
-                <select id="surahSelect" onchange="loadSurah()">
-                    <option>Loading Holy Quran...</option>
-                </select>
-                <audio id="misharyVoice" controls style="width: 100%; margin-bottom: 20px;"></audio>
-                <div id="quran-text-display" style="max-height: 400px; overflow-y: auto;"></div>
-            </div>
-        </div>
+    function renderStreak() {
+        const bars = document.getElementById('streak-bars');
+        const labels = document.getElementById('streak-labels');
+        bars.innerHTML = ''; labels.innerHTML = '';
+        let logs = JSON.parse(localStorage.getItem('ss_logs') || '{}');
 
-        <div id="hadith" class="container">
-            <h2 style="color: var(--accent-rose); font-family: 'Cinzel';">Daily Wisdom</h2>
-            <div style="background: var(--glass); padding: 30px; border-radius: 15px; border-left: 5px solid var(--accent-rose);">
-                <p id="h-text">Loading Bukhari...</p>
-                <p id="h-ref" style="color: var(--accent-mint); font-size: 0.8rem; margin-top: 15px;"></p>
-            </div>
-            <button class="nav-btn" style="margin-top: 20px; width: 100%; text-align:center" onclick="fetchHadith()">Next Hadith</button>
-        </div>
+        for(let i=4; i>=0; i--) {
+            const d = new Date(); d.setDate(d.getDate() - i);
+            const key = d.toISOString().split('T')[0];
+            const val = logs[key] || 0;
+            const h = Math.min(val / 1.5, 90);
 
-        <div id="stats" class="container">
-            <h2 style="color: var(--accent-lavender); font-family: 'Cinzel';">Streak Data</h2>
-            <div style="background: var(--sidebar-bg); padding: 20px; border-radius: 15px;">
-                <canvas id="lineChart"></canvas>
-            </div>
-        </div>
-    </main>
+            const b = document.createElement('div');
+            b.className = 'bar'; b.style.height = (h + 10) + '%';
+            b.innerHTML = `<div class="bar-label">${val}</div>`;
+            bars.appendChild(b);
 
-    <script>
-        let count = 0;
-
-        function showSection(id) {
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-section'));
-            document.getElementById(id).classList.add('active-section');
-            if(id === 'stats') renderStats();
+            const l = document.createElement('div');
+            l.className = 'day-name'; l.style.width = '15%';
+            l.innerText = d.toLocaleDateString('en', {weekday:'short'});
+            labels.appendChild(l);
         }
+    }
 
-        function countUp() {
-            count++;
-            document.getElementById('count-num').innerText = count;
-            if(navigator.vibrate) navigator.vibrate(40);
+    // --- QURAN API ---
+    async function initQuran() {
+        const sel = document.getElementById('surah-selector');
+        const res = await fetch('https://api.alquran.cloud/v1/surah');
+        const data = await res.json();
+        data.data.forEach(s => {
+            let opt = document.createElement('option');
+            opt.value = s.number;
+            opt.innerText = `${s.number}. ${s.englishName}`;
+            sel.appendChild(opt);
+        });
+    }
+
+    async function fetchSurah(num) {
+        if(!num) return;
+        document.getElementById('quran-display').style.display = 'block';
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}/editions/quran-uthmani,en.asad,ar.alafasy`);
+        const data = await res.json();
+        document.getElementById('q-arabic').innerText = data.data[0].ayahs[0].text;
+        document.getElementById('q-trans').innerText = data.data[1].ayahs[0].text;
+        document.getElementById('quran-audio').src = data.data[2].ayahs[0].audio;
+        document.getElementById('quran-audio').play();
+    }
+
+    function shareSite() {
+        if (navigator.share) {
+            navigator.share({ title: 'SoulSync Progress', text: `My Dhikr count today is ${count}! Join me on SoulSync.`, url: window.location.href });
         }
+    }
 
-        function resetCount() { count = 0; document.getElementById('count-num').innerText = 0; }
+    renderStreak();
+    initQuran();
+</script>
 
-        function setDua(txt, trans) {
-            document.getElementById('active-zikr-text').innerText = txt;
-            showSection('zikr');
-            resetCount();
-        }
-
-        // QURAN API
-        async function initApp() {
-            const res = await fetch('https://api.alquran.cloud/v1/surah');
-            const data = await res.json();
-            const select = document.getElementById('surahSelect');
-            select.innerHTML = '<option>Choose Surah</option>';
-            data.data.forEach(s => {
-                let opt = document.createElement('option');
-                opt.value = s.number;
-                opt.text = s.number + ". " + s.englishName;
-                select.add(opt);
-            });
-            fetchHadith();
-        }
-
-        async function loadSurah() {
-            const id = document.getElementById('surahSelect').value;
-            const display = document.getElementById('quran-text-display');
-            const audio = document.getElementById('misharyVoice');
-            
-            display.innerHTML = "Fetching words of Allah...";
-            audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
-            
-            const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/editions/quran-uthmani,en.asad`);
-            const data = await res.json();
-            display.innerHTML = '';
-            data.data[0].ayahs.forEach((a, i) => {
-                display.innerHTML += `
-                    <div style="margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 10px;">
-                        <div class="arabic-text">${a.text}</div>
-                        <div style="color: #888; font-size: 0.9rem;">${data.data[1].ayahs[i].text}</div>
-                    </div>`;
-            });
-        }
-
-        async function fetchHadith() {
-            const hText = document.getElementById('h-text');
-            const hRef = document.getElementById('h-ref');
-            try {
-                const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/');
-                const data = await res.json();
-                hText.innerText = data.data.hadith_english;
-                hRef.innerText = "Sahih Al-Bukhari | " + data.data.header;
-            } catch(e) {
-                hText.innerText = "Actions are judged by intentions.";
-                hRef.innerText = "Sahih Al-Bukhari, Hadith 1";
-            }
-        }
-
-        function renderStats() {
-            const ctx = document.getElementById('lineChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-                    datasets: [{
-                        label: 'Zikr Streak',
-                        data: [1200, 2100, 1800, 3200, 2400],
-                        borderColor: '#B2D8D8',
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(178, 216, 216, 0.1)'
-                    }]
-                },
-                options: { scales: { y: { display: false }, x: { ticks: { color: '#B2D8D8' } } } }
-            });
-        }
-
-        initApp();
-    </script>
 </body>
 </html>
