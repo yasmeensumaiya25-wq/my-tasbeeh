@@ -3,183 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoulSync | Your Spiritual Sanctuary</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Tasbeeh Counter</title>
     <style>
-        :root {
-            --bg-dark: #0F172A;
-            --accent: #2DD4BF; /* Teal accent from video */
-            --card-bg: rgba(30, 41, 59, 0.7);
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--bg-dark);
-            color: #F8FAFC;
-            overflow: hidden; /* Prevents scroll lag */
+        h1 {
+            color: #333;
         }
-        .arabic { font-family: 'Amiri', serif; }
-        .glass { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
-        .active-nav { background: rgba(45, 212, 191, 0.1); color: var(--accent); border-right: 3px solid var(--accent); }
-        
-        /* Tasbeeh Animation */
-        .tap-pulse:active { transform: scale(0.92); transition: 0.1s; }
-        .progress-ring {
-            transition: stroke-dashoffset 0.35s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
+        #counter {
+            font-size: 2em;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
         }
     </style>
 </head>
-<body class="flex h-screen w-screen">
+<body>
 
-    <aside class="w-72 glass h-full flex flex-col p-6 z-50">
-        <div class="flex items-center gap-3 mb-12 px-2">
-            <div class="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
-                <i data-lucide="moon" class="text-white w-6 h-6"></i>
-            </div>
-            <h1 class="text-xl font-bold tracking-tight">SoulSync</h1>
-        </div>
-
-        <nav class="flex flex-col gap-2 flex-1">
-            <button onclick="showPage('dashboard')" id="nav-dashboard" class="nav-btn flex items-center gap-4 p-4 rounded-xl active-nav transition-all">
-                <i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard
-            </button>
-            <button onclick="showPage('tasbeeh')" id="nav-tasbeeh" class="nav-btn flex items-center gap-4 p-4 rounded-xl text-slate-400 hover:text-white transition-all">
-                <i data-lucide="fingerprint" class="w-5 h-5"></i> Tasbeeh
-            </button>
-            <button onclick="showPage('quran')" id="nav-quran" class="nav-btn flex items-center gap-4 p-4 rounded-xl text-slate-400 hover:text-white transition-all">
-                <i data-lucide="book-open" class="w-5 h-5"></i> Quran
-            </button>
-            <button onclick="showPage('dhikr')" id="nav-dhikr" class="nav-btn flex items-center gap-4 p-4 rounded-xl text-slate-400 hover:text-white transition-all">
-                <i data-lucide="heart" class="w-5 h-5"></i> Dhikr Library
-            </button>
-        </nav>
-
-        <div class="glass p-4 rounded-2xl">
-            <p class="text-xs text-slate-500 mb-2 uppercase font-bold tracking-widest">Daily Streak</p>
-            <div class="flex items-center gap-2">
-                <i data-lucide="flame" class="text-orange-500"></i>
-                <span class="text-xl font-bold">12 Days</span>
-            </div>
-        </div>
-    </aside>
-
-    <main class="flex-1 relative overflow-y-auto p-8">
-        
-        <div id="page-dashboard" class="page-content space-y-8">
-            <header>
-                <h2 class="text-3xl font-bold">Assalamu Alaikum, <span class="text-teal-400">User</span></h2>
-                <p class="text-slate-400 mt-1">"Verily, with hardship comes ease."</p>
-            </header>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass p-6 rounded-3xl">
-                    <h3 class="font-semibold mb-4 flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-teal-400"></i> Next Prayer</h3>
-                    <div class="flex justify-between items-end">
-                        <span class="text-4xl font-bold">Asr</span>
-                        <span class="text-teal-400 font-medium">In 2h 15m</span>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-3xl">
-                    <h3 class="font-semibold mb-4 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-teal-400"></i> Hijri Date</h3>
-                    <p class="text-2xl font-bold">14 Ramadan 1445</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-tasbeeh" class="page-content hidden flex flex-col items-center justify-center h-full">
-            <div class="text-center mb-8">
-                <p class="arabic text-5xl text-teal-400 mb-4" id="tasbeeh-arabic">سُبْحَانَ ٱللَّٰهِ</p>
-                <p class="text-slate-400 uppercase tracking-[0.2em] text-sm" id="tasbeeh-eng">SubhanAllah</p>
-            </div>
-
-            <div class="relative flex items-center justify-center tap-pulse" onclick="incrementTasbeeh()">
-                <svg width="280" height="280" class="absolute">
-                    <circle cx="140" cy="140" r="130" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" />
-                    <circle id="progress-bar" cx="140" cy="140" r="130" stroke="#2DD4BF" stroke-width="8" fill="transparent" stroke-dasharray="816.8" stroke-dashoffset="816.8" class="progress-ring" />
-                </svg>
-                
-                <div class="w-60 h-60 rounded-full glass flex flex-col items-center justify-center cursor-pointer shadow-2xl shadow-teal-500/10">
-                    <span class="text-7xl font-bold" id="count">0</span>
-                    <span class="text-slate-500 mt-2">/ <span id="target">33</span></span>
-                </div>
-            </div>
-
-            <div class="flex gap-4 mt-12">
-                <button onclick="resetTasbeeh()" class="px-8 py-3 glass rounded-full hover:bg-white/5 transition flex items-center gap-2">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Reset
-                </button>
-            </div>
-        </div>
-
-        <div id="page-quran" class="page-content hidden">
-            <h2 class="text-3xl font-bold mb-8">The Holy Quran</h2>
-            <div class="grid gap-4">
-                <div class="glass p-4 rounded-2xl flex justify-between items-center hover:bg-white/5 cursor-pointer">
-                    <div class="flex items-center gap-4">
-                        <span class="w-10 h-10 glass flex items-center justify-center rounded-lg font-bold">01</span>
-                        <div>
-                            <p class="font-bold">Al-Fatihah</p>
-                            <p class="text-xs text-slate-500 uppercase">The Opening • 7 Verses</p>
-                        </div>
-                    </div>
-                    <p class="arabic text-2xl">الفاتحة</p>
-                </div>
-                </div>
-        </div>
-
-    </main>
+    <h1>Tasbeeh Counter</h1>
+    <div id="counter">0</div>
+    <button id="incrementBtn">Increment</button>
 
     <script>
-        // Initialize Icons
-        lucide.createIcons();
-
-        // SPA Navigation Logic (Prevent Hanging)
-        function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            // Remove active styles from nav
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active-nav');
-                btn.classList.add('text-slate-400');
-            });
-
-            // Show selected page
-            document.getElementById('page-' + pageId).classList.remove('hidden');
-            // Add active style to current nav
-            document.getElementById('nav-' + pageId).classList.add('active-nav');
-            document.getElementById('nav-' + pageId).classList.remove('text-slate-400');
-        }
-
-        // Tasbeeh Logic
         let count = 0;
-        let target = 33;
-        const progressBar = document.getElementById('progress-bar');
-        const circumference = 130 * 2 * Math.PI;
 
-        function incrementTasbeeh() {
-            count++;
-            document.getElementById('count').innerText = count;
-            
-            // Update Ring
-            const offset = circumference - (count / target) * circumference;
-            progressBar.style.strokeDashoffset = offset;
+        const counterDisplay = document.getElementById('counter');
+        const incrementBtn = document.getElementById('incrementBtn');
 
-            // Haptic Feedback (Mobile Only)
-            if (window.navigator.vibrate) window.navigator.vibrate(40);
-
-            if (count === target) {
-                alert("Alhamdulillah! Goal reached.");
+        incrementBtn.addEventListener('click', () => {
+            try {
+                count++;
+                counterDisplay.textContent = count;
+            } catch (error) {
+                console.error("An error occurred while incrementing the counter:", error);
+                alert("Oops! Something went wrong. Please try again.");
             }
-        }
-
-        function resetTasbeeh() {
-            count = 0;
-            document.getElementById('count').innerText = count;
-            progressBar.style.strokeDashoffset = circumference;
-        }
+        });
     </script>
+
 </body>
 </html>
