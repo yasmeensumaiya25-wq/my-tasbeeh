@@ -1,0 +1,16 @@
+{
+  "name": "SoulSync Spiritual Hub",
+  "short_name": "SoulSync",
+  "description": "Your daily Islamic companion for Dhikr and Journaling.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#bae6fd",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3591/3591461.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
