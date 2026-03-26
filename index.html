@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoulSync | Spiritual Hub</title>
+    <title>SoulSync | Integrated Islamic Hub</title>
     <style>
         :root {
-            --bg: #0f172a;
-            --side: #1e293b;
-            --accent: #bae6fd;
-            --text: #f1f5f9;
-            --glass: rgba(255, 255, 255, 0.03);
-            --pink: #fbcfe8;
+            --sidebar-bg: #1e293b;
+            --main-bg: #0f172a;
+            --card-bg: #1e293b;
+            --pastel-blue: #bae6fd;
+            --pastel-green: #bbf7d0;
+            --pastel-pink: #fbcfe8;
+            --pastel-yellow: #fef08a;
+            --pastel-purple: #e9d5ff;
+            --text-main: #f1f5f9;
+            --sidebar-width: 260px;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--main-bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
             min-height: 100vh;
@@ -25,245 +29,230 @@
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 260px;
-            background: var(--side);
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
             padding: 40px 20px;
             position: fixed;
             height: 100vh;
             border-right: 1px solid rgba(255,255,255,0.05);
             box-sizing: border-box;
+            z-index: 100;
         }
 
-        .logo { font-size: 2rem; color: var(--accent); font-weight: 800; margin-bottom: 5px; }
-        .quote { font-size: 0.8rem; color: var(--pink); opacity: 0.8; margin-bottom: 40px; font-style: italic; }
+        .brand { font-size: 2.2rem; color: var(--pastel-blue); font-weight: 700; margin-bottom: 5px; letter-spacing: -1px; }
+        .quote { font-size: 0.85rem; color: var(--pastel-pink); font-style: italic; margin-bottom: 40px; line-height: 1.4; }
 
-        .nav { list-style: none; padding: 0; }
-        .nav li {
-            padding: 15px;
+        .nav-links { list-style: none; padding: 0; }
+        .nav-links li {
+            padding: 15px 12px;
             margin-bottom: 10px;
             border-radius: 12px;
+            color: var(--pastel-purple);
             cursor: pointer;
             transition: 0.3s;
-            color: #94a3b8;
+            font-weight: 500;
         }
-        .nav li:hover, .nav li.active { background: var(--glass); color: white; border-left: 4px solid var(--accent); }
+        .nav-links li:hover, .nav-links li.active { background: rgba(255,255,255,0.05); color: white; }
 
-        /* --- CONTENT --- */
-        .main { margin-left: 260px; flex: 1; padding: 40px; display: flex; justify-content: center; }
-        .container { max-width: 700px; width: 100%; }
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
 
-        .view { display: none; animation: fadeIn 0.5s ease; }
-        .view.active { display: block; }
+        .container { max-width: 650px; width: 100%; }
+        
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 25px; margin-bottom: 20px; }
-
-        /* --- DHIKR LIBRARY --- */
-        .dhikr-grid { display: grid; gap: 15px; }
-        .dhikr-item { 
-            background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; 
-            cursor: pointer; transition: 0.3s; text-align: center;
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .dhikr-item:hover { background: rgba(255,255,255,0.1); transform: scale(1.02); }
-        #counter { font-size: 4rem; text-align: center; color: var(--accent); margin: 20px 0; }
 
-        /* --- QURAN --- */
-        select, input {
-            width: 100%; background: var(--side); border: 1px solid rgba(255,255,255,0.1);
-            color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-family: inherit;
+        /* --- DASHBOARD ELEMENTS --- */
+        #tasbeeh-display { font-size: 5rem; text-align: center; color: var(--pastel-green); margin: 15px 0; cursor: pointer; font-weight: 200; }
+        
+        /* --- QURAN ELEMENTS --- */
+        .quran-text { color: var(--pastel-blue); text-align: right; font-size: 1.6rem; margin: 15px 0; line-height: 1.8; }
+        audio { width: 100%; filter: invert(0.8) hue-rotate(180deg); margin-top: 10px; }
+        .search-bar { margin-bottom: 10px; background: rgba(255,255,255,0.1) !important; border: 1px solid var(--pastel-blue) !important; }
+
+        /* --- JOURNAL ELEMENTS --- */
+        input, textarea {
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box;
         }
-        .quran-content { max-height: 500px; overflow-y: auto; padding-right: 10px; }
-        .ayah-box { margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
-        .arabic { font-size: 1.8rem; text-align: right; color: var(--accent); margin-bottom: 10px; line-height: 2.2; }
-        .trans { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
-        audio { width: 100%; filter: invert(0.8); margin-top: 10px; }
+        textarea { height: 120px; resize: none; }
+        .entry-item { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--pastel-pink); }
 
-        .btn { background: var(--accent); color: #0f172a; border: none; padding: 12px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; }
+        /* --- UI COMPONENTS --- */
+        select, .btn {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-main); padding: 12px; border-radius: 12px; width: 100%; cursor: pointer; margin-bottom: 10px;
+        }
+        .btn-primary { background: var(--pastel-blue); color: #0f172a; font-weight: bold; border: none; }
 
         @media (max-width: 768px) {
-            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; }
-            .main { margin-left: 0; padding: 20px; }
-            .nav { display: flex; overflow-x: auto; gap: 10px; }
-            .nav li { white-space: nowrap; margin-bottom: 0; }
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 20px; border-right: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .nav-links { display: flex; gap: 10px; margin-top: 20px; overflow-x: auto; }
+            .nav-links li { white-space: nowrap; margin-bottom: 0; }
         }
     </style>
 </head>
 <body>
 
 <aside class="sidebar">
-    <div class="logo">SoulSync</div>
-    <div class="quote">"In the remembrance of Allah do hearts find rest."</div>
-    <ul class="nav">
-        <li onclick="showView('library')" id="nav-library" class="active">Dhikr Library</li>
-        <li onclick="showView('quran')" id="nav-quran">Quran</li>
+    <div class="brand">SoulSync</div>
+    <div class="quote">"Verily, in the remembrance of Allah do hearts find rest."</div>
+    <ul class="nav-links">
+        <li onclick="showView('dashboard')" id="nav-dashboard" class="active">Dashboard</li>
         <li onclick="showView('journal')" id="nav-journal">Journal</li>
+        <li onclick="showView('about')" id="nav-about">Beauty of Islam</li>
     </ul>
 </aside>
 
-<main class="main">
+<main class="main-content">
     <div class="container">
         
-        <div id="library" class="view active">
-            <h2 style="color: var(--accent);">Adhkar</h2>
-            <div id="dhikr-ui" style="display:none;">
-                <div class="card">
-                    <button onclick="backToLib()" style="background:none; border:none; color:var(--pink); cursor:pointer;"><- Back</button>
-                    <h3 id="current-dhikr-name" style="text-align:center;">---</h3>
-                    <div id="counter">0</div>
-                    <button class="btn" onclick="countUp()">Tap to Count</button>
-                    <button onclick="resetC()" style="background:none; border:none; color:gray; width:100%; margin-top:10px; cursor:pointer;">Reset</button>
+        <div id="dashboard" class="view-section active">
+            <h2 style="color: var(--pastel-yellow); margin-top:0;" id="hijri-display">---</h2>
+            
+            <section class="card">
+                <h3 style="color: var(--pastel-pink);">Tasbeeh</h3>
+                <select id="dhikr-selector">
+                    <option value="SubhanAllah">SubhanAllah</option>
+                    <option value="Alhamdulillah">Alhamdulillah</option>
+                    <option value="Allahu Akbar">Allahu Akbar</option>
+                    <option value="Astaghfirullah">Astaghfirullah</option>
+                </select>
+                <div id="tasbeeh-display">0</div>
+                <button class="btn btn-primary" onclick="resetCounter()" style="background: var(--pastel-green); color: #064e3b;">Reset</button>
+            </section>
+
+            <section class="card">
+                <h3 style="color: var(--pastel-blue);">Quran Library</h3>
+                <input type="text" id="surah-search" class="search-bar" placeholder="🔍 Search Surah name..." onkeyup="filterSurahs()">
+                <select id="surah-selector" onchange="fetchSurah(this.value)"><option value="">Select Surah...</option></select>
+                <div id="quran-display" style="display:none; margin-top:15px;">
+                    <div class="quran-text" id="q-arabic">---</div>
+                    <div style="font-size:0.85rem; color:#94a3b8; font-style:italic;" id="q-trans">---</div>
+                    <audio id="quran-audio" controls></audio>
                 </div>
-            </div>
-            <div class="dhikr-grid" id="lib-grid">
-                </div>
+            </section>
         </div>
 
-        <div id="quran" class="view">
-            <h2 style="color: var(--accent);">Holy Qur'an</h2>
+        <div id="journal" class="view-section">
+            <h2 style="color: var(--pastel-pink); margin-top:0;">Soul Reflections</h2>
             <div class="card">
-                <input type="text" id="q-search" placeholder="Search Surah..." onkeyup="filterQ()">
-                <select id="q-select" onchange="fetchFullSurah(this.value)"><option>Select Surah...</option></select>
-                <div id="q-loading" style="display:none; text-align:center;">Loading beautiful verses...</div>
+                <input type="text" id="j-title" placeholder="Entry Title (e.g., A Moment of Peace)">
+                <textarea id="j-content" placeholder="What are you grateful for today? Did you feel a connection during your Dhikr?"></textarea>
+                <button class="btn btn-primary" onclick="saveEntry()">Save Reflection</button>
             </div>
-            <div id="q-result" class="card" style="display:none;">
-                <audio id="q-audio" controls style="margin-bottom:20px;"></audio>
-                <div class="quran-content" id="q-text"></div>
-            </div>
+            <div id="entries-list"></div>
         </div>
 
-        <div id="journal" class="view">
-            <h2 style="color: var(--pink);">Reflections</h2>
-            <div class="card">
-                <input type="text" id="j-title" placeholder="Title of reflection">
-                <textarea id="j-text" placeholder="What are you grateful for today?" style="width:100%; height:150px; background:var(--side); border:none; border-radius:12px; color:white; padding:15px; margin-bottom:15px; font-family:inherit;"></textarea>
-                <button class="btn" onclick="saveJ()">Save to SoulSync</button>
+        <div id="about" class="view-section">
+            <h2 style="color: var(--pastel-green); margin-top:0;">The Path of Peace</h2>
+            <div class="card" style="border-left: 4px solid var(--pastel-green);">
+                <p style="line-height: 1.8; opacity: 0.9;">
+                    Islam is the bridge between the transient world and the eternal soul. It teaches us that every hardship is a purification and every blessing is a responsibility. Through SoulSync, we aim to make spiritual mindfulness a seamless part of your modern life.
+                </p>
+                <button class="btn btn-primary" onclick="shareSite()" style="margin-top:20px;">Share SoulSync</button>
             </div>
-            <div id="j-list"></div>
         </div>
 
     </div>
 </main>
 
 <script>
-    // --- NAVIGATION ---
-    function showView(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.nav li').forEach(l => l.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('nav-'+id).classList.add('active');
+    let allSurahs = [];
+
+    function showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        document.getElementById('nav-' + viewId).classList.add('active');
     }
 
-    // --- DHIKR LOGIC ---
-    const adhkars = [
-        "SubhanAllah", "Alhamdulillah", "Allahu Akbar", "La ilaha illallah", 
-        "Astaghfirullah", "SubhanAllahi wa bihamdihi", "La hawla wala quwwata illa billah",
-        "HasbunAllahu wa ni'mal wakil", "SubhanAllahi al-Azim", "Allahumma salli ala Muhammad"
-    ];
-    let currentCount = 0;
+    const hDate = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {day:'numeric', month:'long', year:'numeric'}).format(new Date());
+    document.getElementById('hijri-display').innerText = hDate;
 
-    function initLib() {
-        const grid = document.getElementById('lib-grid');
-        adhkars.forEach(a => {
-            grid.innerHTML += `<div class="dhikr-item" onclick="startDhikr('${a}')">${a}</div>`;
-        });
-    }
+    let count = 0;
+    const tDisplay = document.getElementById('tasbeeh-display');
+    tDisplay.addEventListener('click', () => { count++; tDisplay.innerText = count; });
+    function resetCounter() { count = 0; tDisplay.innerText = count; }
 
-    function startDhikr(name) {
-        document.getElementById('lib-grid').style.display = 'none';
-        document.getElementById('dhikr-ui').style.display = 'block';
-        document.getElementById('current-dhikr-name').innerText = name;
-        resetC();
-    }
-
-    function backToLib() {
-        document.getElementById('lib-grid').style.display = 'grid';
-        document.getElementById('dhikr-ui').style.display = 'none';
-    }
-
-    function countUp() { currentCount++; document.getElementById('counter').innerText = currentCount; }
-    function resetC() { currentCount = 0; document.getElementById('counter').innerText = 0; }
-
-    // --- QURAN LOGIC (ALAFASY) ---
-    let surahList = [];
     async function initQuran() {
         const res = await fetch('https://api.alquran.cloud/v1/surah');
         const data = await res.json();
-        surahList = data.data;
-        populateQ(surahList);
+        allSurahs = data.data;
+        populateSurahDropdown(allSurahs);
     }
 
-    function populateQ(list) {
-        const sel = document.getElementById('q-select');
+    function populateSurahDropdown(surahs) {
+        const sel = document.getElementById('surah-selector');
         sel.innerHTML = '<option value="">Select Surah...</option>';
-        list.forEach(s => sel.innerHTML += `<option value="${s.number}">${s.number}. ${s.englishName}</option>`);
+        surahs.forEach(s => sel.innerHTML += `<option value="${s.number}">${s.number}. ${s.englishName}</option>`);
     }
 
-    function filterQ() {
-        const term = document.getElementById('q-search').value.toLowerCase();
-        populateQ(surahList.filter(s => s.englishName.toLowerCase().includes(term)));
+    function filterSurahs() {
+        const term = document.getElementById('surah-search').value.toLowerCase();
+        const filtered = allSurahs.filter(s => s.englishName.toLowerCase().includes(term));
+        populateSurahDropdown(filtered);
     }
 
-    async function fetchFullSurah(num) {
+    async function fetchSurah(num) {
         if(!num) return;
-        document.getElementById('q-loading').style.display = 'block';
-        document.getElementById('q-result').style.display = 'none';
-
-        // Fetch Arabic, English translation, and Audio (Mishary Alafasy)
-        const [arRes, enRes, audRes] = await Promise.all([
-            fetch(`https://api.alquran.cloud/v1/surah/${num}/quran-uthmani`),
-            fetch(`https://api.alquran.cloud/v1/surah/${num}/en.asad`),
-            fetch(`https://api.alquran.cloud/v1/surah/${num}/ar.alafasy`)
-        ]);
-
-        const arData = await arRes.json();
-        const enData = await enRes.json();
-        const audData = await audRes.json();
-
-        const container = document.getElementById('q-text');
-        container.innerHTML = '';
-        
-        arData.data.ayahs.forEach((ayah, i) => {
-            container.innerHTML += `
-                <div class="ayah-box">
-                    <div class="arabic">${ayah.text}</div>
-                    <div class="trans">${enData.data.ayahs[i].text}</div>
-                </div>
-            `;
-        });
-
-        document.getElementById('q-audio').src = audData.data.ayahs[0].audio; // Plays from first ayah
-        document.getElementById('q-loading').style.display = 'none';
-        document.getElementById('q-result').style.display = 'block';
+        document.getElementById('quran-display').style.display = 'block';
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}/editions/quran-uthmani,en.asad,ar.alafasy`);
+        const data = await res.json();
+        document.getElementById('q-arabic').innerText = data.data[0].ayahs[0].text;
+        document.getElementById('q-trans').innerText = data.data[1].ayahs[0].text;
+        document.getElementById('quran-audio').src = data.data[2].ayahs[0].audio;
     }
 
-    // --- JOURNAL LOGIC ---
-    function saveJ() {
-        const t = document.getElementById('j-title').value;
-        const b = document.getElementById('j-text').value;
-        if(!t || !b) return;
-        const entry = { t, b, d: new Date().toLocaleDateString() };
-        let logs = JSON.parse(localStorage.getItem('ss_j') || '[]');
-        logs.unshift(entry);
-        localStorage.setItem('ss_j', JSON.stringify(logs));
-        document.getElementById('j-title').value = ''; document.getElementById('j-text').value = '';
-        loadJ();
+    function saveEntry() {
+        const title = document.getElementById('j-title').value;
+        const content = document.getElementById('j-content').value;
+        if(!title || !content) return alert("Please fill both fields.");
+        const entry = { title, content, date: new Date().toLocaleDateString(), id: Date.now() };
+        let entries = JSON.parse(localStorage.getItem('ss_journal') || '[]');
+        entries.unshift(entry);
+        localStorage.setItem('ss_journal', JSON.stringify(entries));
+        document.getElementById('j-title').value = ''; document.getElementById('j-content').value = '';
+        displayEntries();
     }
 
-    function loadJ() {
-        const list = document.getElementById('j-list');
-        const logs = JSON.parse(localStorage.getItem('ss_j') || '[]');
-        list.innerHTML = logs.map(l => `
-            <div class="card">
-                <small style="color:var(--accent)">${l.d}</small>
-                <h4 style="margin:5px 0;">${l.t}</h4>
-                <p style="opacity:0.8; font-size:0.9rem;">${l.b}</p>
+    function displayEntries() {
+        const list = document.getElementById('entries-list');
+        const entries = JSON.parse(localStorage.getItem('ss_journal') || '[]');
+        list.innerHTML = entries.map(e => `
+            <div class="entry-item">
+                <div style="font-size:0.7rem; color:var(--pastel-green);">${e.date}</div>
+                <div style="font-weight:bold; margin:5px 0;">${e.title}</div>
+                <div style="font-size:0.9rem; opacity:0.8;">${e.content}</div>
             </div>
         `).join('');
     }
 
-    initLib();
+    function shareSite() {
+        if (navigator.share) navigator.share({ title: 'SoulSync', text: 'My Spiritual Hub', url: window.location.href });
+    }
+
     initQuran();
-    loadJ();
+    displayEntries();
 </script>
+
 </body>
 </html>
