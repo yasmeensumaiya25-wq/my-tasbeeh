@@ -3,263 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noor - Islamic Daily Hub</title>
+    <title>Radiant Quran | Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --pastel-blue: #B2E2F2;
-            --pastel-green: #C1E1C1;
-            --pastel-pink: #FFB7B2;
-            --pastel-yellow: #FDFD96;
-            --text-main: #e0e0e0;
+            --bg: #0f111a;
+            --card-bg: #1a1d2e;
+            --accent: #f472b6; /* Pink */
+            --glow: #34d399;   /* Mint */
+            --text: #e2e8f0;
+            --sub-text: #94a3b8;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--bg); color: var(--text);
+            font-family: 'Quicksand', sans-serif; margin: 0; padding: 20px;
+            background-image: radial-gradient(circle at 2px 2px, rgba(52, 211, 153, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
         }
 
-        .container {
-            max-width: 600px;
-            width: 100%;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
 
         header {
-            text-align: center;
-            margin-bottom: 30px;
+            text-align: center; padding: 50px 20px; background: rgba(255,255,255,0.02);
+            border-radius: 40px; border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 40px; backdrop-filter: blur(10px);
         }
 
-        h1 { color: var(--pastel-blue); font-weight: 300; }
-        .hijri-date { color: var(--pastel-yellow); font-size: 1.2rem; margin-top: -10px; }
+        h1 { margin: 0; font-size: 2.5rem; letter-spacing: -1px; }
+        .mint-glow { color: var(--glow); text-shadow: 0 0 15px rgba(52, 211, 153, 0.4); }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        /* --- CONTROLS --- */
+        .search-area {
+            display: flex; gap: 15px; margin-bottom: 30px; justify-content: center;
+        }
+        input, select {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 12px 20px; border-radius: 15px; outline: none;
+            font-family: 'Quicksand'; font-size: 1rem;
+        }
+        .btn-load {
+            background: var(--accent); color: #000; border: none;
+            padding: 12px 25px; border-radius: 15px; cursor: pointer;
+            font-weight: 700; transition: 0.3s;
+        }
+        .btn-load:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(244, 114, 182, 0.4); }
+
+        /* --- VERSES DISPLAY --- */
+        .ayah-card {
+            background: var(--card-bg); border-radius: 30px; padding: 35px;
+            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.03);
+            transition: 0.3s; position: relative;
         }
 
-        /* Tasbeeh Section */
-        #tasbeeh-display {
-            font-size: 4rem;
-            text-align: center;
-            color: var(--pastel-green);
-            margin: 20px 0;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.1s;
+        .arabic-text {
+            font-family: 'Amiri', serif; font-size: 2.4rem; text-align: right;
+            color: #fff; line-height: 2.2; margin-bottom: 20px; direction: rtl;
         }
 
-        #tasbeeh-display:active { transform: scale(0.95); }
-
-        .btn {
-            background: transparent;
-            border: 1px solid var(--pastel-pink);
-            color: var(--pastel-pink);
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            margin-top: 10px;
+        .translation-text {
+            font-size: 1.1rem; color: var(--sub-text); line-height: 1.6;
+            border-left: 3px solid var(--accent); padding-left: 20px;
         }
 
-        .btn:hover { background: var(--pastel-pink); color: var(--bg-color); }
-
-        /* Quran Section */
-        .quran-text { color: var(--pastel-blue); text-align: right; font-size: 1.4rem; margin-bottom: 10px; }
-        .translation { color: var(--text-main); font-style: italic; font-size: 0.9rem; margin-bottom: 15px; }
-
-        /* Streak Section */
-        .streak-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            height: 100px;
-            padding-top: 20px;
+        .audio-btn {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(255,255,255,0.05); border: none; color: var(--glow);
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .bar {
-            width: 15%;
-            background: var(--pastel-blue);
-            border-radius: 5px 5px 0 0;
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--bg-color);
-            transition: height 0.5s ease;
-        }
-
-        .day-label { font-size: 0.6rem; color: var(--pastel-yellow); text-align: center; margin-top: 5px; }
-
-        /* Beauty of Islam */
-        .beauty-quote {
-            border-left: 3px solid var(--pastel-green);
-            padding-left: 15px;
-            font-style: italic;
-            color: var(--pastel-green);
-        }
-
-        .share-btn {
-            background: var(--pastel-yellow);
-            color: var(--bg-color);
-            border: none;
-            font-weight: bold;
-        }
+        .loader { text-align: center; color: var(--accent); display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Noor Daily</h1>
-        <div class="hijri-date" id="hijri-display">Loading Hijri Date...</div>
+        <i data-lucide="moon" color="#34d399" size="40" style="margin-bottom:15px;"></i>
+        <h1>Radiant <span class="mint-glow">Quran</span></h1>
+        <p style="color: var(--sub-text);">Connect to the Divine Words with Tafseer</p>
     </header>
 
-    <section class="card">
-        <h3 style="color: var(--pastel-pink);">Tasbeeh Counter</h3>
-        <select id="dhikr-selector" class="btn" style="margin-bottom: 15px; text-align: left;">
-            <option value="SubhanAllah">SubhanAllah</option>
-            <option value="Alhamdulillah">Alhamdulillah</option>
-            <option value="Allahu Akbar">Allahu Akbar</option>
-            <option value="Astaghfirullah">Astaghfirullah</option>
-        </select>
-        <div id="tasbeeh-display">0</div>
-        <p style="text-align: center; font-size: 0.8rem; color: #888;">Tap number to count</p>
-        <button class="btn" onclick="resetCounter()">Reset</button>
-    </section>
+    <div class="search-area">
+        <input type="number" id="surahNum" placeholder="Surah (1-114)" value="1" min="1" max="114" style="width: 120px;">
+        <button class="btn-load" onclick="fetchSurah()">Load Surah</button>
+    </div>
 
-    <section class="card">
-        <h3 style="color: var(--pastel-yellow);">Last 5 Days Activity</h3>
-        <div class="streak-container" id="streak-bars">
-            </div>
-        <div style="display: flex; justify-content: space-between;" id="streak-labels">
-            </div>
-    </section>
-
-    <section class="card">
-        <h3 style="color: var(--pastel-blue);">Daily Quran (Mishary Alafasy)</h3>
-        <div id="quran-content">
-            <div class="quran-text" id="q-arabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-            <div class="translation" id="q-trans">In the name of Allah, the Entirely Merciful, the Especially Merciful.</div>
-            <audio id="quran-audio" controls style="width: 100%; filter: invert(1);"></audio>
+    <div id="loader" class="loader">✨ Loading beautiful verses...</div>
+    <div id="quranContainer">
         </div>
-    </section>
-
-    <section class="card">
-        <h3 style="color: var(--pastel-green);">The Beauty of Islam</h3>
-        <p class="beauty-quote">"Verily, in the remembrance of Allah do hearts find rest." (Quran 13:28)</p>
-        <p style="font-size: 0.9rem; line-height: 1.6;">Islam is a path of peace, discipline, and profound connection. It teaches us that every small act of kindness and every whisper of dhikr is a step toward light.</p>
-    </section>
-
-    <button class="btn share-btn" id="share-btn">Share Progress</button>
 </div>
 
 <script>
-    // --- HIJRI DATE ---
-    const today = new Date();
-    const hijriDate = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
-        day: 'numeric', month: 'long', year: 'numeric'
-    }).format(today);
-    document.getElementById('hijri-display').innerText = hijriDate;
+    lucide.createIcons();
 
-    // --- TASBEEH LOGIC ---
-    let count = 0;
-    const display = document.getElementById('tasbeeh-display');
-    const dhikrSelector = document.getElementById('dhikr-selector');
+    async function fetchSurah() {
+        const num = document.getElementById('surahNum').value;
+        const container = document.getElementById('quranContainer');
+        const loader = document.getElementById('loader');
 
-    display.addEventListener('click', () => {
-        count++;
-        display.innerText = count;
-        updateStreak(1);
-    });
+        // Reset & Show Loader
+        container.innerHTML = '';
+        loader.style.display = 'block';
 
-    function resetCounter() {
-        count = 0;
-        display.innerText = count;
-    }
-
-    // --- STREAK & DATA LOGIC (5 DAYS) ---
-    function updateStreak(increment) {
-        const dateKey = new Date().toISOString().split('T')[0];
-        let history = JSON.parse(localStorage.getItem('dhikrHistory') || '{}');
-        history[dateKey] = (history[dateKey] || 0) + increment;
-        localStorage.setItem('dhikrHistory', JSON.stringify(history));
-        renderStreak();
-    }
-
-    function renderStreak() {
-        const streakBars = document.getElementById('streak-bars');
-        const streakLabels = document.getElementById('streak-labels');
-        streakBars.innerHTML = '';
-        streakLabels.innerHTML = '';
-
-        let history = JSON.parse(localStorage.getItem('dhikrHistory') || '{}');
-        
-        // Get last 5 days
-        for (let i = 4; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            const key = d.toISOString().split('T')[0];
-            const val = history[key] || 0;
-            const height = Math.min(val, 100); // Max height cap for visual
-
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            bar.style.height = (height + 10) + '%';
-            bar.innerText = val;
-            streakBars.appendChild(bar);
-
-            const label = document.createElement('div');
-            label.className = 'day-label';
-            label.innerText = d.toLocaleDateString('en-US', { weekday: 'short' });
-            streakLabels.appendChild(label);
-        }
-    }
-
-    // --- QURAN API (Mishary Alafasy) ---
-    async function loadQuran() {
         try {
-            // Fetching Surah Al-Fatiha as a starter
-            const response = await fetch('https://api.alquran.cloud/v1/surah/1/editions/quran-uthmani,en.asad,ar.alafasy');
-            const data = await response.json();
+            // We fetch Arabic and English simultaneously
+            const [arRes, enRes] = await Promise.all([
+                fetch(`https://api.alquran.cloud/v1/surah/${num}`),
+                fetch(`https://api.alquran.cloud/v1/surah/${num}/en.sahih`)
+            ]);
+
+            const arData = await arRes.json();
+            const enData = await enRes.json();
+
+            loader.style.display = 'none';
+
+            arData.data.ayahs.forEach((ayah, index) => {
+                const enAyah = enData.data.ayahs[index];
+                
+                const card = document.createElement('div');
+                card.className = 'ayah-card';
+                card.innerHTML = `
+                    <button class="audio-btn" onclick="playAudio(${ayah.number})">
+                        <i data-lucide="play" size="18"></i>
+                    </button>
+                    <div class="arabic-text">${ayah.text}</div>
+                    <div class="translation-text">
+                        <small style="color:var(--accent)">Ayah ${ayah.numberInSurah}</small><br>
+                        ${enAyah.text}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
             
-            const arabic = data.data[0].ayahs[0].text;
-            const trans = data.data[1].ayahs[0].text;
-            const audio = data.data[2].ayahs[0].audio;
-
-            document.getElementById('q-arabic').innerText = arabic;
-            document.getElementById('q-trans').innerText = trans;
-            document.getElementById('quran-audio').src = audio;
-        } catch (e) {
-            console.log("Error loading Quran data");
+        } catch (error) {
+            loader.innerHTML = "❌ Oops! Something went wrong.";
+            console.error(error);
         }
     }
 
-    // --- SHARE LOGIC ---
-    document.getElementById('share-btn').addEventListener('click', async () => {
-        const shareData = {
-            title: 'My Dhikr Progress',
-            text: `I just finished my Dhikr on Noor Hub! My current count for ${dhikrSelector.value} is ${count}.`,
-            url: window.location.href
-        };
-        try {
-            await navigator.share(shareData);
-        } catch (err) {
-            alert("Share feature only works on mobile or secure browsers. Copy your count: " + count);
-        }
-    });
+    function playAudio(number) {
+        // Simple audio fetch
+        const audio = new Audio(`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${number}.mp3`);
+        audio.play();
+    }
 
-    // Initialize
-    renderStreak();
-    loadQuran();
+    // Initial load
+    fetchSurah();
 </script>
 
 </body>
