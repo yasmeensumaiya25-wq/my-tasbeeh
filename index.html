@@ -270,39 +270,53 @@
         const noSelect = document.getElementById('noSelectQuran');
         const audio = document.getElementById('mainAudio');
         
+        // UI Reset
         noSelect.classList.add('hidden');
         content.innerHTML = '';
         loading.classList.remove('hidden');
 
-        const num = id.toString().padStart(3, '0');
-        audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
-        audio.play();
+        // 1. Set Mishary Alafasy Audio
+        const paddedId = id.toString().padStart(3, '0');
+        audio.src = `https://server8.mp3quran.net/afs/${paddedId}.mp3`;
+        audio.load();
 
         try {
+            // 2. Fetch Arabic (Uthmani) and English (Sahih International)
             const [arRes, enRes] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/surah/${id}`),
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/quran-uthmani`),
                 fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`)
             ]);
             
             const arData = await arRes.json();
             const enData = await enRes.json();
             
+            // 3. Update Header
             document.getElementById('surahTitleAr').innerText = arData.data.name;
-            document.getElementById('surahTitleEn').innerText = `${name} - ${arData.data.englishNameTranslation}`;
+            document.getElementById('surahTitleEn').innerText = `${name} — ${arData.data.englishNameTranslation}`;
             
+            // 4. Render Verses
             arData.data.ayahs.forEach((ayah, i) => {
                 const div = document.createElement('div');
-                div.className = "verse-container";
+                div.className = "verse-container group hover:bg-white/5 transition-colors duration-300 px-4 rounded-lg border-b border-dustygold/10 py-8";
                 div.innerHTML = `
-                    <div class="text-right font-amiri text-2xl text-dustygold mb-3 leading-loose">${ayah.text}</div>
-                    <div class="text-champagne/80 text-sm leading-relaxed"><span class="text-dustygold/50 mr-2">[${ayah.numberInSurah}]</span> ${enData.data.ayahs[i].text}</div>
+                    <div class="text-right font-amiri text-3xl text-dustygold mb-6 leading-[2.8] tracking-wide">
+                        ${ayah.text}
+                    </div>
+                    <div class="text-champagne/80 text-sm leading-relaxed border-l-2 border-dustygold/30 pl-4 italic">
+                        <span class="text-dustygold/50 font-bold mr-2">verse ${ayah.numberInSurah}</span> 
+                        ${enData.data.ayahs[i].text}
+                    </div>
                 `;
                 content.appendChild(div);
             });
+
         } catch (error) {
-            content.innerHTML = '<p class="text-red-500">Error loading verses. Please check your connection.</p>';
+            console.error("Error:", error);
+            content.innerHTML = '<p class="text-red-500 text-center p-10">Unable to load Surah. Please check your connection.</p>';
         } finally {
             loading.classList.add('hidden');
+            // Scroll back to top of the reading area
+            document.getElementById('verseDisplay').scrollTo({top: 0, behavior: 'smooth'});
         }
     }
 
