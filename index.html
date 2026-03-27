@@ -144,19 +144,37 @@
      </div>
     </section>
     <section id="journal-page" class="page-content hidden p-8">
-     <div class="grid md:grid-cols-2 gap-8">
-      <div class="glass-card p-6 rounded-xl">
-       <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3><textarea class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne" placeholder="Reflect on your day..."></textarea> <button class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg">Save Reflection</button>
-      </div>
-      <div class="glass-card p-6 rounded-xl">
-       <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
-       <div id="todoList" class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10"><input type="checkbox" class="w-4 h-4 accent-dustygold"> <span class="text-sm">Morning Adhkar</span>
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="glass-card p-6 rounded-xl flex flex-col gap-6">
+            <div>
+                <h3 class="text-dustygold font-bold mb-4">How are you feeling?</h3>
+                <div class="flex justify-between bg-black/40 p-4 rounded-lg border border-dustygold/10" id="moodTracker">
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('✨', this)">✨</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😊', this)">😊</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('🤲', this)">🤲</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😔', this)">😔</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😴', this)">😴</button>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3>
+                <textarea id="journalInput" class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne text-sm" placeholder="Write your thoughts here..."></textarea>
+                <button onclick="saveReflection()" class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg hover:bg-champagne transition">Save Reflection</button>
+            </div>
         </div>
-       </div>
-      </div>
-     </div>
-    </section>
+
+        <div class="glass-card p-6 rounded-xl">
+            <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="todoInput" class="flex-1 bg-black/40 border border-dustygold/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-dustygold" placeholder="Add a goal...">
+                <button onclick="addTodo()" class="bg-dustygold/20 text-dustygold px-4 py-2 rounded-lg hover:bg-dustygold hover:text-black transition">Add</button>
+            </div>
+            <div id="todoList" class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
+                </div>
+        </div>
+    </div>
+</section>
    </main>
   </div>
   <script>
@@ -167,11 +185,57 @@
     ];
 
     const namesOfAllah = [
-        { ar: "ٱلرَّحْمَٰنُ", tr: "Ar-Rahman" }, { ar: "ٱلرَّحِيمُ", tr: "Ar-Raheem" },
-        { ar: "ٱلْمَلِكُ", tr: "Al-Malik" }, { ar: "ٱلْقُدُّوسُ", tr: "Al-Quddus" },
-        { ar: "ٱلسَّلَامُ", tr: "As-Salam" }, { ar: "ٱلْمُؤْمِنُ", tr: "Al-Mu'min" },
-        { ar: "ٱلْمُهَيْمِنُ", tr: "Al-Muhaymin" }, { ar: "ٱلْعَزِيزُ", tr: "Al-Aziz" },
-        { ar: "ٱلْجَبَّارُ", tr: "Al-Jabbar" }, { ar: "ٱلْمُتَكَبِّرُ", tr: "Al-Mutakabbir" }
+    { ar: "ٱلرَّحْمَٰنُ", tr: "Ar-Rahman" }, { ar: "ٱلرَّحِيمُ", tr: "Ar-Raheem" },
+    { ar: "ٱلْمَلِكُ", tr: "Al-Malik" }, { ar: "ٱلْقُدُّوسُ", tr: "Al-Quddus" },
+    { ar: "ٱلسَّلَٰمُ", tr: "As-Salam" }, { ar: "ٱلْمُؤْمِنُ", tr: "Al-Mu'min" },
+    { ar: "ٱلْمُهَيْمِنُ", tr: "Al-Muhaymin" }, { ar: "ٱلْعَزِيزُ", tr: "Al-Aziz" },
+    { ar: "ٱلْجَبَّارُ", tr: "Al-Jabbar" }, { ar: "ٱلْمُتَكَبِّرُ", tr: "Al-Mutakabbir" },
+    { ar: "ٱلْخَٰلِقُ", tr: "Al-Khaliq" }, { ar: "ٱلْبَارِئُ", tr: "Al-Bari'" },
+    { ar: "ٱلْمُصَوِّرُ", tr: "Al-Musawwir" }, { ar: "ٱلْغَفَّٰرُ", tr: "Al-Ghaffar" },
+    { ar: "ٱلْقَهَّٰرُ", tr: "Al-Qahhar" }, { ar: "ٱلْوَهَّابُ", tr: "Al-Wahhab" },
+    { ar: "ٱلرَّزَّاقُ", tr: "Ar-Razzaq" }, { ar: "ٱلْفَتَّاحُ", tr: "Al-Fattah" },
+    { ar: "ٱلْعَلِيمُ", tr: "Al-Alim" }, { ar: "ٱلْقَابِضُ", tr: "Al-Qabid" },
+    { ar: "ٱلْبَاسِطُ", tr: "Al-Basit" }, { ar: "ٱلْخَافِضُ", tr: "Al-Khafid" },
+    { ar: "ٱلرَّافِعُ", tr: "Ar-Rafi'" }, { ar: "ٱلْمُعِزُّ", tr: "Al-Mu'izz" },
+    { ar: "ٱلْمُذِلُّ", tr: "Al-Mudhill" }, { ar: "ٱلسَّمِيعُ", tr: "As-Sami'" },
+    { ar: "ٱلْبَصِيرُ", tr: "Al-Basir" }, { ar: "ٱلْحَكَمُ", tr: "Al-Hakam" },
+    { ar: "ٱلْعَدْلُ", tr: "Al-Adl" }, { ar: "ٱللَّطِيفُ", tr: "Al-Latif" },
+    { ar: "ٱلْخَبِيرُ", tr: "Al-Khabir" }, { ar: "ٱلْحَلِيمُ", tr: "Al-Halim" },
+    { ar: "ٱلْعَظِيمُ", tr: "Al-Azim" }, { ar: "ٱلْغَفُورُ", tr: "Al-Ghafur" },
+    { ar: "ٱلشَّكُورُ", tr: "Ash-Shakur" }, { ar: "ٱلْعَلِيُّ", tr: "Al-Aliy" },
+    { ar: "ٱلْكَبِيرُ", tr: "Al-Kabir" }, { ar: "ٱلْحَفِيظُ", tr: "Al-Hafiz" },
+    { ar: "ٱلْمُقِيتُ", tr: "Al-Muqit" }, { ar: "ٱلْحَسِيبُ", tr: "Al-Hasib" },
+    { ar: "ٱلْجَلِيلُ", tr: "Al-Jalil" }, { ar: "ٱلْكَرِيمُ", tr: "Al-Karim" },
+    { ar: "ٱلرَّقِيبُ", tr: "Ar-Raqib" }, { ar: "ٱلْمُجِيبُ", tr: "Al-Mujib" },
+    { ar: "ٱلْوَٰسِعُ", tr: "Al-Wasi'" }, { ar: "ٱلْحَكِيمُ", tr: "Al-Hakim" },
+    { ar: "ٱلْوَدُودُ", tr: "Al-Wadud" }, { ar: "ٱلْمَجِيدُ", tr: "Al-Majid" },
+    { ar: "ٱلْبَاعِثُ", tr: "Al-Ba'ith" }, { ar: "ٱلشَّهِيدُ", tr: "Ash-Shahid" },
+    { ar: "ٱلْحَقُّ", tr: "Al-Haqq" }, { ar: "ٱلْوَكِيلُ", tr: "Al-Wakil" },
+    { ar: "ٱلْقَوِيُّ", tr: "Al-Qawiy" }, { ar: "ٱلْمَتِينُ", tr: "Al-Matin" },
+    { ar: "ٱلْوَلِيُّ", tr: "Al-Wali" }, { ar: "ٱلْحَمِيدُ", tr: "Al-Hamid" },
+    { ar: "ٱلْمُحْصِي", tr: "Al-Muhsi" }, { ar: "ٱلْمُبْدِئُ", tr: "Al-Mubdi'" },
+    { ar: "ٱلْمُعِيدُ", tr: "Al-Mu'id" }, { ar: "ٱلْمُحْيِي", tr: "Al-Muhyi" },
+    { ar: "ٱلْمُمِيتُ", tr: "Al-Mumit" }, { ar: "ٱلْحَيُّ", tr: "Al-Hayy" },
+    { ar: "ٱلْقَيُّومُ", tr: "Al-Qayyum" }, { ar: "ٱلْوَاجِدُ", tr: "Al-Wajid" },
+    { ar: "ٱلْمَاجِدُ", tr: "Al-Majid" }, { ar: "ٱلْوَٰحِدُ", tr: "Al-Wahid" },
+    { ar: "ٱلْأَحَدُ", tr: "Al-Ahad" }, { ar: "ٱلصَّمَدُ", tr: "As-Samad" },
+    { ar: "ٱلْقَٰدِرُ", tr: "Al-Qadir" }, { ar: "ٱلْمُقْتَدِرُ", tr: "Al-Muqtadir" },
+    { ar: "ٱلْمُقَدِّمُ", tr: "Al-Muqaddim" }, { ar: "ٱلْمُؤَخِّرُ", tr: "Al-Mu'akhkhir" },
+    { ar: "ٱلْأَوَّلُ", tr: "Al-Awwal" }, { ar: "ٱلْآخِرُ", tr: "Al-Akhir" },
+    { ar: "ٱلظَّٰهِرُ", tr: "Az-Zahir" }, { ar: "ٱلْبَاطِنُ", tr: "Al-Batin" },
+    { ar: "ٱلْوَالِي", tr: "Al-Wali" }, { ar: "ٱلْمُتَعَالِي", tr: "Al-Muta'ali" },
+    { ar: "ٱلْبَرُّ", tr: "Al-Barr" }, { ar: "ٱلتَّوَّابُ", tr: "At-Tawwab" },
+    { ar: "ٱلْمُنْتَقِمُ", tr: "Al-Muntaqim" }, { ar: "ٱلْعَفُوُّ", tr: "Al-Afuww" },
+    { ar: "ٱلرَّءُوفُ", tr: "Ar-Ra'uf" }, { ar: "مَٰلِكُ ٱلْمُلْكِ", tr: "Malik-ul-Mulk" },
+    { ar: "ذُو ٱلْجَلَٰلِ وَٱلْإِكْرَامِ", tr: "Dhul-Jalali-wal-Ikram" }, { ar: "ٱلْمُقْسِطُ", tr: "Al-Muqsit" },
+    { ar: "ٱلْجَامِعُ", tr: "Al-Jami'" }, { ar: "ٱلْغَنِيُّ", tr: "Al-Ghani" },
+    { ar: "ٱلْمُغْنِي", tr: "Al-Mughni" }, { ar: "ٱلْمَانِعُ", tr: "Al-Mani'" },
+    { ar: "ٱلضَّارُّ", tr: "Ad-Darr" }, { ar: "ٱلنَّافِعُ", tr: "An-Nafi'" },
+    { ar: "ٱلنُّورُ", tr: "An-Nur" }, { ar: "ٱلْهَادِي", tr: "Al-Hadi" },
+    { ar: "ٱلْبَدِيعُ", tr: "Al-Badi'" }, { ar: "ٱلْبَاقِي", tr: "Al-Baqi" },
+    { ar: "ٱلْوَارِثُ", tr: "Al-Warith" }, { ar: "ٱلرَّشِيدُ", tr: "Ar-Rashid" },
+    { ar: "ٱلصَّبُورُ", tr: "As-Sabur" }
+];
     ];
 
     const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatthir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"];
