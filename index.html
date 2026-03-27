@@ -1,137 +1,318 @@
 <!doctype html>
 <html lang="en" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoulSync | Premium Spiritual Companion</title>
-    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --dustygold: #C5A059; --obsidian: #050505; --champagne: #F7E7CE; }
-        body { background-color: var(--obsidian); color: var(--champagne); font-family: 'Poppins', sans-serif; overflow: hidden; }
-        .font-amiri { font-family: 'Amiri', serif; }
-        .glass-card { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(197, 160, 89, 0.15); }
-        
-        /* Sidebar Mobile Logic */
-        #sidebar { transition: transform 0.3s ease-in-out; z-index: 50; }
-        @media (max-width: 768px) {
-            #sidebar { position: fixed; transform: translateX(-100%); height: 100%; }
-            #sidebar.open { transform: translateX(0); }
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoulSync | Premium Spiritual Companion</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#050505',
+            champagne: '#F7E7CE',
+            dustygold: '#C5A059',
+            charcoal: '#111111'
+          }
         }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #050505; color: #F7E7CE; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+    .font-amiri { font-family: 'Amiri', serif; }
+    .glass-card { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(197, 160, 89, 0.15); }
+    
+    /* Fingerprint Scanner Style */
+    .fingerprint-zone {
+      width: 140px; height: 140px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(197, 160, 89, 0.2) 0%, transparent 70%);
+      border: 2px solid rgba(197, 160, 89, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; cursor: pointer; transition: all 0.2s ease;
+    }
+    .fingerprint-zone:active { transform: scale(0.92); background: rgba(197, 160, 89, 0.4); }
+    .ripple {
+      position: absolute; border: 1px solid #C5A059; border-radius: 50%;
+      animation: ripple-out 0.8s ease-out forwards; pointer-events: none;
+    }
+    @keyframes ripple-out {
+      from { width: 140px; height: 140px; opacity: 0.5; }
+      to { width: 280px; height: 280px; opacity: 0; }
+    }
 
-        /* Hanging Lanterns with Threads */
-        .lantern-thread { width: 1px; height: 40px; background: var(--dustygold); opacity: 0.4; margin: 0 auto; }
-        .lantern-body { 
-            width: 30px; height: 45px; background: var(--dustygold); 
-            clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
-            box-shadow: 0 0 15px var(--dustygold); animation: flicker 2s infinite alternate;
-        }
-        @keyframes flicker { from { opacity: 0.5; } to { opacity: 1; } }
-
-        .nav-item.active { border-left: 3px solid var(--dustygold); background: rgba(197, 160, 89, 0.1); color: var(--dustygold); }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--dustygold); border-radius: 10px; }
-    </style>
-</head>
-<body class="h-full flex">
-
-    <button onclick="toggleMenu()" class="md:hidden fixed top-6 left-6 z-[60] p-2 glass-card rounded-lg text-dustygold">
-        <i data-lucide="menu"></i>
-    </button>
-
-    <aside id="sidebar" class="w-64 bg-black border-r border-dustygold/20 flex flex-col">
-        <div class="p-8 text-center">
-            <div class="text-4xl text-dustygold mb-2">🌙</div>
-            <h1 class="text-2xl font-amiri font-bold text-dustygold tracking-widest">SoulSync</h1>
+    .nav-item.active { border-left: 3px solid #C5A059; background: rgba(197, 160, 89, 0.1); color: #C5A059; }
+    .adhkar-pill.active { background: #C5A059; color: #050505; }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+    
+    /* Verse Styling */
+    .verse-container { border-bottom: 1px solid rgba(197, 160, 89, 0.1); padding: 1.5rem 0; }
+    .loading-spinner { border: 3px solid rgba(197, 160, 89, 0.1); border-top: 3px solid #C5A059; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="flex h-full">
+   <aside class="w-64 bg-black border-r border-dustygold/20 flex flex-col hidden md:flex">
+    <div class="p-8">
+     <h1 class="text-2xl font-amiri font-bold text-dustygold tracking-widest">SoulSync</h1>
+     <p class="text-[10px] uppercase tracking-widest opacity-40 mt-1">Digital Misbaha</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar"><button data-page="tasbeeh" class="nav-item active w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="hash"></i> Tasbeeh </button> <button data-page="quran" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="book-open"></i> Quran </button> <button data-page="dhikr" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="library"></i> Dhikr Library </button> <button data-page="beauty" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="sparkles"></i> Beauty of Islam </button> <button data-page="journal" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="pen-tool"></i> Journal </button>
+    </nav>
+   </aside>
+   <main class="flex-1 overflow-y-auto relative custom-scrollbar bg-obsidian">
+    <section id="tasbeeh-page" class="page-content p-8 max-w-4xl mx-auto flex flex-col items-center">
+     <div class="text-center mt-12 mb-10">
+      <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
+      <p class="text-champagne/40 text-sm italic">Focus your heart on the Almighty</p>
+     </div>
+     <div class="w-full max-w-lg mb-12 overflow-x-auto custom-scrollbar pb-4">
+      <div class="flex gap-4 justify-start px-2" id="adhkarSelector"></div>
+     </div>
+     <div class="glass-card rounded-3xl p-16 flex flex-col items-center w-full max-w-md shadow-2xl relative overflow-hidden">
+      <div id="mainCount" class="text-8xl font-bold text-dustygold mb-2">
+       0
+      </div>
+      <div id="activeDhikrAr" class="text-3xl font-amiri text-champagne mb-12 text-center">
+       سُبْحَانَ اللَّهِ
+      </div>
+      <div class="fingerprint-zone" id="tapZone">
+       <i data-lucide="fingerprint" class="text-dustygold w-16 h-16"></i>
+      </div><button id="resetCount" class="mt-12 text-dustygold/50 hover:text-dustygold text-xs tracking-tighter uppercase transition">Reset Counter</button>
+     </div>
+    </section>
+    <section id="quran-page" class="page-content hidden p-4 md:p-8 h-full flex flex-col">
+     <div class="flex flex-col md:flex-row gap-6 h-full overflow-hidden">
+      <div class="w-full md:w-80 glass-card rounded-xl p-4 overflow-y-auto custom-scrollbar flex-shrink-0">
+       <h3 class="text-dustygold font-amiri text-xl mb-4 border-b border-dustygold/20 pb-2">Surahs</h3>
+       <div id="surahList" class="space-y-1"></div>
+      </div>
+      <div class="flex-1 glass-card rounded-xl flex flex-col overflow-hidden">
+       <div id="quranHeader" class="p-6 border-b border-dustygold/20 flex justify-between items-center bg-black/20">
+        <div>
+         <h2 id="surahTitleAr" class="text-3xl font-amiri text-dustygold"></h2>
+         <p id="surahTitleEn" class="text-sm text-champagne/50"></p>
         </div>
-        <nav class="flex-1 p-4 space-y-2">
-            <button onclick="switchPage('tasbeeh')" class="nav-item active w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
-                <i data-lucide="hash"></i> Tasbeeh
-            </button>
-            <button onclick="switchPage('quran')" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
-                <i data-lucide="book-open"></i> Quran
-            </button>
-            <button onclick="switchPage('dhikr')" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
-                <i data-lucide="library"></i> Dhikr Library
-            </button>
-        </nav>
-    </aside>
+        <audio id="mainAudio" controls class="max-w-[200px] md:max-w-xs"></audio>
+       </div>
+       <div id="verseDisplay" class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-black/10">
+        <div id="noSelectQuran" class="h-full flex flex-col items-center justify-center opacity-30 text-center"><i data-lucide="book-open" class="w-16 h-16 mb-4"></i>
+         <p>Select a Surah to read the Noble Quran</p>
+        </div>
+        <div id="loadingQuran" class="hidden h-full flex items-center justify-center">
+         <div class="loading-spinner"></div>
+        </div>
+        <div id="versesContent" class="space-y-4"></div>
+       </div>
+      </div>
+     </div>
+    </section>
+    <section id="dhikr-page" class="page-content hidden p-8">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-amiri text-dustygold mb-2">Dhikr Library</h2>
+      <p class="text-champagne/60 italic">Remembrance with purpose and virtue</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6" id="dhikrContainer"></div>
+    </section>
+    <section id="beauty-page" class="page-content hidden p-8">
+     <div class="text-center mb-12">
+      <h2 class="text-4xl font-amiri text-dustygold mb-2">Beauty of Islam</h2>
+      <p class="text-champagne/60 italic">The Virtues &amp; Names of Allah</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6 mb-12">
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-dustygold">
+       <h3 class="text-dustygold font-bold mb-2">Mercy (Rahma)</h3>
+       <p class="text-sm text-champagne/70 italic">"My Mercy encompasses all things" - Quran 7:156</p>
+      </div>
+      <div class="glass-card p-6 rounded-2xl border-l-4 border-dustygold">
+       <h3 class="text-dustygold font-bold mb-2">Gratitude (Shukr)</h3>
+       <p class="text-sm text-champagne/70 italic">"If you are grateful, I will surely increase you" - Quran 14:7</p>
+      </div>
+     </div>
+     <div class="glass-card rounded-2xl p-8">
+      <h3 class="text-xl font-amiri text-dustygold mb-6 border-b border-dustygold/20 pb-2">The 99 Names of Allah</h3>
+      <div id="namesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
+     </div>
+    </section>
+    <section id="journal-page" class="page-content hidden p-8">
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="glass-card p-6 rounded-xl">
+       <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3><textarea class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne" placeholder="Reflect on your day..."></textarea> <button class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg">Save Reflection</button>
+      </div>
+      <div class="glass-card p-6 rounded-xl">
+       <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
+       <div id="todoList" class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10"><input type="checkbox" class="w-4 h-4 accent-dustygold"> <span class="text-sm">Morning Adhkar</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+   </main>
+  </div>
+  <script>
+    const adhkars = [
+        { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" }, { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
+        { ar: "اللَّهُ أَكْبَرُ", en: "Allahu Akbar" }, { ar: "أَسْتَغْفِرُ اللَّهَ", en: "Astaghfirullah" },
+        { ar: "لَا إِلَهَ إِلَّا اللَّهُ", en: "La ilaha illallah" }
+    ];
 
-    <main class="flex-1 flex flex-col relative overflow-hidden">
+    const namesOfAllah = [
+        { ar: "ٱلرَّحْمَٰنُ", tr: "Ar-Rahman" }, { ar: "ٱلرَّحِيمُ", tr: "Ar-Raheem" },
+        { ar: "ٱلْمَلِكُ", tr: "Al-Malik" }, { ar: "ٱلْقُدُّوسُ", tr: "Al-Quddus" },
+        { ar: "ٱلسَّلَامُ", tr: "As-Salam" }, { ar: "ٱلْمُؤْمِنُ", tr: "Al-Mu'min" },
+        { ar: "ٱلْمُهَيْمِنُ", tr: "Al-Muhaymin" }, { ar: "ٱلْعَزِيزُ", tr: "Al-Aziz" },
+        { ar: "ٱلْجَبَّارُ", tr: "Al-Jabbar" }, { ar: "ٱلْمُتَكَبِّرُ", tr: "Al-Mutakabbir" }
+    ];
+
+    const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatthir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"];
+
+    const dhikrDetails = [
+        { ar: "سُبْحَانَ اللَّهِ", en: "Glory be to Allah", virtue: "A tree is planted in Paradise for every recital." },
+        { ar: "الْحَمْدُ لِلَّهِ", en: "All praise is due to Allah", virtue: "Fills the scale of good deeds." },
+        { ar: "لَا إِلَهَ إِلَّا اللَّهُ", en: "There is no god but Allah", virtue: "The best of all remembrance." },
+        { ar: "أَسْتَغْفِرُ اللَّهَ", en: "I seek forgiveness from Allah", virtue: "Opens the doors of sustenance." },
+        { ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ", en: "O Allah, send blessings upon Muhammad", virtue: "Allah will send ten blessings upon you." },
+        { ar: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", en: "There is no power nor strength except with Allah", virtue: "A treasure from the treasures of Paradise." }
+    ];
+
+    let currentCount = 0;
+
+    window.onload = () => {
+        lucide.createIcons();
+        setupAdhkar();
+        setupNames();
+        setupSurahList();
+        setupDhikr();
+
+        document.getElementById('tapZone').addEventListener('click', (e) => {
+            currentCount++;
+            document.getElementById('mainCount').innerText = currentCount;
+            createRipple(e);
+        });
+
+        document.getElementById('resetCount').onclick = () => { currentCount = 0; document.getElementById('mainCount').innerText = 0; };
+
+        document.querySelectorAll('[data-page]').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.getElementById(`${btn.dataset.page}-page`).classList.remove('hidden');
+                btn.classList.add('active');
+            };
+        });
+    };
+
+    function setupAdhkar() {
+        const bar = document.getElementById('adhkarSelector');
+        adhkars.forEach((item, idx) => {
+            const pill = document.createElement('button');
+            pill.className = `adhkar-pill px-6 py-2 rounded-full border border-dustygold/20 text-xs flex-shrink-0 ${idx === 0 ? 'active' : ''}`;
+            pill.innerText = item.en;
+            pill.onclick = () => {
+                document.querySelectorAll('.adhkar-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                document.getElementById('activeDhikrAr').innerText = item.ar;
+                currentCount = 0; document.getElementById('mainCount').innerText = 0;
+            };
+            bar.appendChild(pill);
+        });
+    }
+
+    function setupNames() {
+        const grid = document.getElementById('namesGrid');
+        namesOfAllah.forEach(name => {
+            const item = document.createElement('div');
+            item.className = "text-center p-4 bg-white/5 rounded-xl border border-white/10 hover:border-dustygold transition";
+            item.innerHTML = `<p class="font-amiri text-dustygold text-lg">${name.ar}</p><p class="text-[10px] opacity-40 uppercase">${name.tr}</p>`;
+            grid.appendChild(item);
+        });
+    }
+
+    function setupDhikr() {
+        const container = document.getElementById('dhikrContainer');
+        dhikrDetails.forEach(item => {
+            const card = document.createElement('div');
+            card.className = "glass-card p-6 rounded-xl hover:border-dustygold/50 transition-all";
+            card.innerHTML = `
+                <div class="text-right text-3xl font-amiri text-dustygold mb-4">${item.ar}</div>
+                <div class="font-medium mb-1 text-champagne">${item.en}</div>
+                <div class="text-xs italic text-champagne/60">"${item.virtue}"</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function setupSurahList() {
+        const list = document.getElementById('surahList');
+        surahs.forEach((s, idx) => {
+            const btn = document.createElement('button');
+            btn.className = "w-full text-left p-3 text-xs border-b border-white/5 hover:bg-dustygold/10 transition flex justify-between items-center group";
+            btn.innerHTML = `<span>${idx + 1}. ${s}</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-0 group-hover:opacity-100"></i>`;
+            btn.onclick = () => loadFullSurah(idx + 1, s);
+            list.appendChild(btn);
+        });
+        lucide.createIcons();
+    }
+
+    async function loadFullSurah(id, name) {
+        const content = document.getElementById('versesContent');
+        const loading = document.getElementById('loadingQuran');
+        const noSelect = document.getElementById('noSelectQuran');
+        const audio = document.getElementById('mainAudio');
         
-        <div class="absolute top-0 right-10 flex gap-6 z-10">
-            <div><div class="lantern-thread"></div><div class="lantern-body"></div></div>
-            <div><div class="lantern-thread" style="height:60px"></div><div class="lantern-body"></div></div>
-        </div>
+        noSelect.classList.add('hidden');
+        content.innerHTML = '';
+        loading.classList.remove('hidden');
 
-        <section id="page-tasbeeh" class="page-content flex-1 flex flex-col items-center justify-center p-8">
-            <div class="text-center mb-10">
-                <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
-                <div id="activeDhikrAr" class="text-3xl font-amiri mt-4 opacity-80">سُبْحَانَ اللَّهِ</div>
-            </div>
-            <div class="glass-card rounded-full w-64 h-64 flex flex-col items-center justify-center border-2 border-dustygold/40 cursor-pointer active:scale-95 transition" onclick="incrementCounter()">
-                <div id="mainCount" class="text-7xl font-bold text-dustygold">0</div>
-                <div class="text-[10px] uppercase tracking-widest opacity-40">Tap to Count</div>
-            </div>
-            <button onclick="resetCounter()" class="mt-8 text-dustygold/50 hover:text-dustygold uppercase text-xs tracking-widest">Reset</button>
-        </section>
+        const num = id.toString().padStart(3, '0');
+        audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
+        audio.play();
 
-        <section id="page-quran" class="page-content hidden flex-1 flex flex-col md:flex-row gap-4 p-4 md:p-8 overflow-hidden">
-            <div class="w-full md:w-72 glass-card rounded-xl p-4 overflow-y-auto custom-scrollbar">
-                <h3 class="text-dustygold font-amiri text-xl mb-4 border-b border-dustygold/20 pb-2">Surahs</h3>
-                <div id="surahList" class="space-y-1"></div>
-            </div>
-            <div class="flex-1 glass-card rounded-xl flex flex-col overflow-hidden">
-                <div class="p-6 border-b border-dustygold/20 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h2 id="currentSurahName" class="text-2xl font-amiri text-dustygold">Select a Surah</h2>
-                    <audio id="quranAudio" controls class="w-full md:max-w-xs"></audio>
-                </div>
-                <div id="quranContent" class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
-                    <p class="text-center opacity-30 mt-20 italic">The word of Allah awaits...</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-dhikr" class="page-content hidden flex-1 p-8 overflow-y-auto custom-scrollbar">
-            <h2 class="text-4xl font-amiri text-center text-dustygold mb-10">Dhikr Library</h2>
-            <div id="dhikrGrid" class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto"></div>
-        </section>
-
-    </main>
-
-    <script>
-        // --- 1. CORE NAVIGATION ---
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById('page-' + pageId).classList.remove('hidden');
+        try {
+            const [arRes, enRes] = await Promise.all([
+                fetch(`https://api.alquran.cloud/v1/surah/${id}`),
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`)
+            ]);
             
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.toLowerCase().includes(pageId)) btn.classList.add('active');
+            const arData = await arRes.json();
+            const enData = await enRes.json();
+            
+            document.getElementById('surahTitleAr').innerText = arData.data.name;
+            document.getElementById('surahTitleEn').innerText = `${name} - ${arData.data.englishNameTranslation}`;
+            
+            arData.data.ayahs.forEach((ayah, i) => {
+                const div = document.createElement('div');
+                div.className = "verse-container";
+                div.innerHTML = `
+                    <div class="text-right font-amiri text-2xl text-dustygold mb-3 leading-loose">${ayah.text}</div>
+                    <div class="text-champagne/80 text-sm leading-relaxed"><span class="text-dustygold/50 mr-2">[${ayah.numberInSurah}]</span> ${enData.data.ayahs[i].text}</div>
+                `;
+                content.appendChild(div);
             });
-
-            if(window.innerWidth < 768) toggleMenu();
+        } catch (error) {
+            content.innerHTML = '<p class="text-red-500">Error loading verses. Please check your connection.</p>';
+        } finally {
+            loading.classList.add('hidden');
         }
+    }
 
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
-
-        // --- 2. TASBEEH FUNCTIONALITY ---
-        let count = 0;
-        function incrementCounter() {
-            count++;
-            document.getElementById('mainCount').innerText = count;
-        }
-        function resetCounter() {
-            count = 0;
-            document.getElementById('mainCount').innerText = 0;
-        }
-
-        // --- 3. QURAN FUNCTIONALITY ---
-        const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus"]; // Sample list
-
-        function initQuran() {
-            const list = document.getElementById('surahList');
-            sur
+    function createRipple(e) {
+        const zone = document.getElementById('tapZone');
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        zone.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 800);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2e6746e178c169',t:'MTc3NDYxNDU5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
