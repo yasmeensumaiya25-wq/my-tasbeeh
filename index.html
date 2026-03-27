@@ -144,37 +144,19 @@
      </div>
     </section>
     <section id="journal-page" class="page-content hidden p-8">
-    <div class="grid md:grid-cols-2 gap-8">
-        <div class="glass-card p-6 rounded-xl flex flex-col gap-6">
-            <div>
-                <h3 class="text-dustygold font-bold mb-4">How are you feeling?</h3>
-                <div class="flex justify-between bg-black/40 p-4 rounded-lg border border-dustygold/10" id="moodTracker">
-                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('✨', this)">✨</button>
-                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😊', this)">😊</button>
-                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('🤲', this)">🤲</button>
-                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😔', this)">😔</button>
-                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😴', this)">😴</button>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3>
-                <textarea id="journalInput" class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne text-sm" placeholder="Write your thoughts here..."></textarea>
-                <button onclick="saveReflection()" class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg hover:bg-champagne transition">Save Reflection</button>
-            </div>
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="glass-card p-6 rounded-xl">
+       <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3><textarea class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne" placeholder="Reflect on your day..."></textarea> <button class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg">Save Reflection</button>
+      </div>
+      <div class="glass-card p-6 rounded-xl">
+       <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
+       <div id="todoList" class="space-y-3">
+        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10"><input type="checkbox" class="w-4 h-4 accent-dustygold"> <span class="text-sm">Morning Adhkar</span>
         </div>
-
-        <div class="glass-card p-6 rounded-xl">
-            <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
-            <div class="flex gap-2 mb-4">
-                <input type="text" id="todoInput" class="flex-1 bg-black/40 border border-dustygold/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-dustygold" placeholder="Add a goal...">
-                <button onclick="addTodo()" class="bg-dustygold/20 text-dustygold px-4 py-2 rounded-lg hover:bg-dustygold hover:text-black transition">Add</button>
-            </div>
-            <div id="todoList" class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
-                </div>
-        </div>
-    </div>
-</section>
+       </div>
+      </div>
+     </div>
+    </section>
    </main>
   </div>
   <script>
