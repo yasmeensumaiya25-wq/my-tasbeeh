@@ -1,149 +1,137 @@
 <!doctype html>
 <html lang="en" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SoulSync | Premium Spiritual Companion</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            obsidian: '#050505',
-            champagne: '#F7E7CE',
-            dustygold: '#C5A059',
-            charcoal: '#111111'
-          }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulSync | Premium Spiritual Companion</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --dustygold: #C5A059; --obsidian: #050505; --champagne: #F7E7CE; }
+        body { background-color: var(--obsidian); color: var(--champagne); font-family: 'Poppins', sans-serif; overflow: hidden; }
+        .font-amiri { font-family: 'Amiri', serif; }
+        .glass-card { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(197, 160, 89, 0.15); }
+        
+        /* Sidebar Mobile Logic */
+        #sidebar { transition: transform 0.3s ease-in-out; z-index: 50; }
+        @media (max-width: 768px) {
+            #sidebar { position: fixed; transform: translateX(-100%); height: 100%; }
+            #sidebar.open { transform: translateX(0); }
         }
-      }
-    }
-  </script>
-  <style>
-    body { background-color: #050505; color: #F7E7CE; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
-    .font-amiri { font-family: 'Amiri', serif; }
-    .glass-card { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(197, 160, 89, 0.15); }
-    
-    .fingerprint-zone {
-      width: 140px; height: 140px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(197, 160, 89, 0.2) 0%, transparent 70%);
-      border: 2px solid rgba(197, 160, 89, 0.3);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; cursor: pointer; transition: all 0.2s ease;
-    }
-    .fingerprint-zone:active { transform: scale(0.92); background: rgba(197, 160, 89, 0.4); }
-    
-    .nav-item.active { border-left: 3px solid #C5A059; background: rgba(197, 160, 89, 0.1); color: #C5A059; }
-    .adhkar-pill.active { background: #C5A059 !important; color: #050505 !important; }
-    
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
 
-    @media (max-width: 767px) {
-        #sidebar {
-            position: fixed; top: 0; left: 0; height: 100%; z-index: 50;
-            transform: translateX(-100%); transition: transform 0.3s ease; width: 280px;
+        /* Hanging Lanterns with Threads */
+        .lantern-thread { width: 1px; height: 40px; background: var(--dustygold); opacity: 0.4; margin: 0 auto; }
+        .lantern-body { 
+            width: 30px; height: 45px; background: var(--dustygold); 
+            clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+            box-shadow: 0 0 15px var(--dustygold); animation: flicker 2s infinite alternate;
         }
-        #sidebar.open { transform: translateX(0); }
-        #mobile-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            z-index: 40; backdrop-filter: blur(4px);
-        }
-        #mobile-overlay.visible { display: block; }
-    }
-  </style>
- </head>
- <body class="h-full">
-  
-  <div id="mobile-overlay" onclick="toggleSidebar()"></div>
+        @keyframes flicker { from { opacity: 0.5; } to { opacity: 1; } }
 
-  <button onclick="toggleSidebar()" class="md:hidden fixed top-6 left-6 z-[60] p-3 glass-card rounded-full text-dustygold shadow-lg">
-    <i data-lucide="menu"></i>
-  </button>
+        .nav-item.active { border-left: 3px solid var(--dustygold); background: rgba(197, 160, 89, 0.1); color: var(--dustygold); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--dustygold); border-radius: 10px; }
+    </style>
+</head>
+<body class="h-full flex">
 
-  <div class="flex h-full">
-   <aside id="sidebar" class="w-64 bg-black border-r border-dustygold/20 flex flex-col md:flex">
-    <div class="p-8">
-     <h1 class="text-2xl font-amiri font-bold text-dustygold tracking-widest">SoulSync</h1>
-     <p class="text-[10px] uppercase tracking-widest opacity-40 mt-1">Digital Misbaha</p>
-    </div>
-    <nav class="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
-        <button onclick="showPage('tasbeeh')" class="nav-btn nav-item active w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="hash"></i> Tasbeeh </button> 
-        <button onclick="showPage('quran')" class="nav-btn nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="book-open"></i> Quran </button> 
-        <button onclick="showPage('dhikr')" class="nav-btn nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="library"></i> Dhikr Library </button> 
-        <button onclick="showPage('beauty')" class="nav-btn nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="sparkles"></i> Beauty of Islam </button> 
-        <button onclick="showPage('journal')" class="nav-btn nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="pen-tool"></i> Journal </button>
-    </nav>
-   </aside>
+    <button onclick="toggleMenu()" class="md:hidden fixed top-6 left-6 z-[60] p-2 glass-card rounded-lg text-dustygold">
+        <i data-lucide="menu"></i>
+    </button>
 
-   <main class="flex-1 overflow-y-auto relative custom-scrollbar bg-obsidian">
-    
-    <section id="tasbeeh-page" class="page-content p-8 max-w-4xl mx-auto flex flex-col items-center">
-     <div class="text-center mt-12 mb-10">
-      <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
-      <p class="text-champagne/40 text-sm italic">Focus your heart on the Almighty</p>
-     </div>
-     <div class="w-full max-w-lg mb-12 overflow-x-auto custom-scrollbar pb-4">
-      <div class="flex gap-4 justify-start px-2" id="adhkarSelector"></div>
-     </div>
-     <div class="glass-card rounded-3xl p-16 flex flex-col items-center w-full max-w-md shadow-2xl relative">
-      <div id="mainCount" class="text-8xl font-bold text-dustygold mb-2">0</div>
-      <div id="activeDhikrAr" class="text-3xl font-amiri text-champagne mb-12 text-center">سُبْحَانَ اللَّهِ</div>
-      <div class="fingerprint-zone" onclick="handleTap()">
-       <i data-lucide="fingerprint" class="text-dustygold w-16 h-16"></i>
-      </div>
-      <button onclick="resetCounter()" class="mt-12 text-dustygold/50 hover:text-dustygold text-xs tracking-tighter uppercase">Reset Counter</button>
-     </div>
-    </section>
+    <aside id="sidebar" class="w-64 bg-black border-r border-dustygold/20 flex flex-col">
+        <div class="p-8 text-center">
+            <div class="text-4xl text-dustygold mb-2">🌙</div>
+            <h1 class="text-2xl font-amiri font-bold text-dustygold tracking-widest">SoulSync</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <button onclick="switchPage('tasbeeh')" class="nav-item active w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
+                <i data-lucide="hash"></i> Tasbeeh
+            </button>
+            <button onclick="switchPage('quran')" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
+                <i data-lucide="book-open"></i> Quran
+            </button>
+            <button onclick="switchPage('dhikr')" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm">
+                <i data-lucide="library"></i> Dhikr Library
+            </button>
+        </nav>
+    </aside>
 
-    <section id="quran-page" class="page-content hidden p-4 md:p-8 h-full">
-        <div class="flex flex-col md:flex-row gap-6 h-full overflow-hidden">
-            <div class="w-full md:w-80 glass-card rounded-xl p-4 overflow-y-auto custom-scrollbar">
+    <main class="flex-1 flex flex-col relative overflow-hidden">
+        
+        <div class="absolute top-0 right-10 flex gap-6 z-10">
+            <div><div class="lantern-thread"></div><div class="lantern-body"></div></div>
+            <div><div class="lantern-thread" style="height:60px"></div><div class="lantern-body"></div></div>
+        </div>
+
+        <section id="page-tasbeeh" class="page-content flex-1 flex flex-col items-center justify-center p-8">
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
+                <div id="activeDhikrAr" class="text-3xl font-amiri mt-4 opacity-80">سُبْحَانَ اللَّهِ</div>
+            </div>
+            <div class="glass-card rounded-full w-64 h-64 flex flex-col items-center justify-center border-2 border-dustygold/40 cursor-pointer active:scale-95 transition" onclick="incrementCounter()">
+                <div id="mainCount" class="text-7xl font-bold text-dustygold">0</div>
+                <div class="text-[10px] uppercase tracking-widest opacity-40">Tap to Count</div>
+            </div>
+            <button onclick="resetCounter()" class="mt-8 text-dustygold/50 hover:text-dustygold uppercase text-xs tracking-widest">Reset</button>
+        </section>
+
+        <section id="page-quran" class="page-content hidden flex-1 flex flex-col md:flex-row gap-4 p-4 md:p-8 overflow-hidden">
+            <div class="w-full md:w-72 glass-card rounded-xl p-4 overflow-y-auto custom-scrollbar">
                 <h3 class="text-dustygold font-amiri text-xl mb-4 border-b border-dustygold/20 pb-2">Surahs</h3>
                 <div id="surahList" class="space-y-1"></div>
             </div>
-            <div class="flex-1 glass-card rounded-xl flex flex-col overflow-hidden bg-black/20">
-                <div class="p-6 border-b border-dustygold/20 flex flex-wrap justify-between items-center gap-4">
-                    <div>
-                        <h2 id="surahTitleAr" class="text-3xl font-amiri text-dustygold">Select Surah</h2>
-                        <p id="surahTitleEn" class="text-sm text-champagne/50">Ready to listen</p>
-                    </div>
-                    <audio id="mainAudio" controls class="w-full md:max-w-xs"></audio>
+            <div class="flex-1 glass-card rounded-xl flex flex-col overflow-hidden">
+                <div class="p-6 border-b border-dustygold/20 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h2 id="currentSurahName" class="text-2xl font-amiri text-dustygold">Select a Surah</h2>
+                    <audio id="quranAudio" controls class="w-full md:max-w-xs"></audio>
                 </div>
-                <div id="versesContent" class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-                    <div class="text-center opacity-30 mt-20"><i data-lucide="book-open" class="mx-auto w-12 h-12 mb-4"></i><p>Choose a surah from the list</p></div>
+                <div id="quranContent" class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+                    <p class="text-center opacity-30 mt-20 italic">The word of Allah awaits...</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="dhikr-page" class="page-content hidden p-8">
-        <div class="text-center mb-12"><h2 class="text-4xl font-amiri text-dustygold">Dhikr Library</h2></div>
-        <div class="grid md:grid-cols-2 gap-6" id="dhikrContainer"></div>
-    </section>
+        <section id="page-dhikr" class="page-content hidden flex-1 p-8 overflow-y-auto custom-scrollbar">
+            <h2 class="text-4xl font-amiri text-center text-dustygold mb-10">Dhikr Library</h2>
+            <div id="dhikrGrid" class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto"></div>
+        </section>
 
-    <section id="beauty-page" class="page-content hidden p-8 text-center">
-        <h2 class="text-4xl font-amiri text-dustygold mb-8">99 Names of Allah</h2>
-        <div id="namesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
-    </section>
+    </main>
 
-    <section id="journal-page" class="page-content hidden p-8">
-        <div class="max-w-2xl mx-auto glass-card p-8 rounded-2xl">
-            <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3>
-            <textarea class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:border-dustygold text-champagne outline-none" placeholder="Write your thoughts..."></textarea>
-            <button class="mt-4 w-full bg-dustygold text-black font-bold py-3 rounded-lg hover:bg-champagne transition">Save Reflection</button>
-        </div>
-    </section>
+    <script>
+        // --- 1. CORE NAVIGATION ---
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(pageId)) btn.classList.add('active');
+            });
 
-   </main>
-  </div>
+            if(window.innerWidth < 768) toggleMenu();
+        }
 
-  <script>
-    // --- APP STATE ---
-    let count = 0;
-    const adhkars = [
-        { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" },
-        { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
-        { ar: "اللَّهُ أَك
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // --- 2. TASBEEH FUNCTIONALITY ---
+        let count = 0;
+        function incrementCounter() {
+            count++;
+            document.getElementById('mainCount').innerText = count;
+        }
+        function resetCounter() {
+            count = 0;
+            document.getElementById('mainCount').innerText = 0;
+        }
+
+        // --- 3. QURAN FUNCTIONALITY ---
+        const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus"]; // Sample list
+
+        function initQuran() {
+            const list = document.getElementById('surahList');
+            sur
