@@ -69,7 +69,7 @@
     <nav class="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar"><button data-page="tasbeeh" class="nav-item active w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="hash"></i> Tasbeeh </button> <button data-page="quran" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="book-open"></i> Quran </button> <button data-page="dhikr" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="library"></i> Dhikr Library </button> <button data-page="beauty" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="sparkles"></i> Beauty of Islam </button> <button data-page="journal" class="nav-item w-full text-left px-4 py-3 rounded flex items-center gap-3 text-sm"> <i data-lucide="pen-tool"></i> Journal </button>
     </nav>
    </aside>
-   <main class="flex-1 overflow-y-auto relative custom-scrollbar bg-obsidian">
+   <main class="flex-1 overflow-y-auto relative custom-scrollbar bg-obsidian pb-24 md:pb-0">
     <section id="tasbeeh-page" class="page-content p-8 max-w-4xl mx-auto flex flex-col items-center">
      <div class="text-center mt-12 mb-10">
       <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
@@ -314,5 +314,47 @@
         setTimeout(() => ripple.remove(), 800);
     }
   </script>
+  <div id="mobileNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-dustygold/20 flex justify-around items-center p-2 pb-6 z-50">
+    <button data-page="tasbeeh" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+        <i data-lucide="hash" class="w-5 h-5"></i>
+        <span class="text-[9px] uppercase font-medium">Tasbeeh</span>
+    </button>
+    <button data-page="quran" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+        <span class="text-[9px] uppercase font-medium">Quran</span>
+    </button>
+    <button data-page="dhikr" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+        <i data-lucide="library" class="w-5 h-5"></i>
+        <span class="text-[9px] uppercase font-medium">Dhikr</span>
+    </button>
+    <button data-page="beauty" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+        <i data-lucide="sparkles" class="w-5 h-5"></i>
+        <span class="text-[9px] uppercase font-medium">Beauty</span>
+    </button>
+    <button data-page="journal" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+        <i data-lucide="pen-tool" class="w-5 h-5"></i>
+        <span class="text-[9px] uppercase font-medium">Journal</span>
+    </button>
+</div>
+
+<script>
+    // Logic to sync mobile nav with page sections
+    document.querySelectorAll('#mobileNav [data-page]').forEach(btn => {
+        btn.onclick = () => {
+            const pageId = btn.dataset.page;
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(n => {
+                n.classList.remove('active', 'text-dustygold');
+                n.classList.add('text-dustygold/40');
+            });
+            const targetPage = document.getElementById(`${pageId}-page`);
+            if(targetPage) targetPage.classList.remove('hidden');
+            document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el => {
+                el.classList.add('active', 'text-dustygold');
+                el.classList.remove('text-dustygold/40');
+            });
+        };
+    });
+</script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2e6746e178c169',t:'MTc3NDYxNDU5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
