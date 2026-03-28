@@ -143,37 +143,34 @@
       <div id="namesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
      </div>
     </section>
-   <section id="journal-page" class="page-content hidden p-8 max-w-5xl mx-auto">
+    <section id="journal-page" class="page-content hidden p-8">
     <div class="grid md:grid-cols-2 gap-8">
-        <div class="space-y-6">
-            <div class="glass-card p-6 rounded-xl">
-                <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
-                    <i data-lucide="smile"></i> How are you feeling?
-                </h3>
-                <div class="flex justify-between gap-2" id="moodTracker">
-                    <button onclick="setMood('blessed', '✨')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">✨</button>
-                    <button onclick="setMood('peaceful', '🌿')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">🌿</button>
-                    <button onclick="setMood('grateful', '🤲')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">🤲</button>
-                    <button onclick="setMood('tired', '😴')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">😴</button>
-                    <button onclick="setMood('struggling', '⏳')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">⏳</button>
+        <div class="glass-card p-6 rounded-xl flex flex-col gap-6">
+            <div>
+                <h3 class="text-dustygold font-bold mb-4">How are you feeling?</h3>
+                <div class="flex justify-between bg-black/40 p-4 rounded-lg border border-dustygold/10" id="moodTracker">
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('✨', this)">✨</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😊', this)">😊</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('🤲', this)">🤲</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😔', this)">😔</button>
+                    <button class="mood-btn text-2xl grayscale hover:grayscale-0 transition active:scale-90" onclick="setMood('😴', this)">😴</button>
                 </div>
             </div>
 
-            <div class="glass-card p-6 rounded-xl">
-                <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
-                    <i data-lucide="pen-tool"></i> Daily Reflection
-                </h3>
-               <textarea id="journalInput" class="..." placeholder="What's on your heart?"></textarea>
-            <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
-                <i data-lucide="check-square"></i> Spiritual Goals
-            </h3>
-            <div class="flex gap-2 mb-6">
-                <input type="text" id="todoInput" class="flex-1 bg-black/40 border border-dustygold/20 rounded-lg px-4 py-2 focus:outline-none focus:border-dustygold text-sm" placeholder="Add a new goal...">
-                <button onclick="addTodo()" class="bg-dustygold/20 text-dustygold px-4 py-2 rounded-lg border border-dustygold/30 hover:bg-dustygold hover:text-black transition-all">
-                    <i data-lucide="plus" class="w-5 h-5"></i>
-                </button>
+            <div>
+                <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3>
+                <textarea id="journalInput" class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne text-sm" placeholder="Write your thoughts here..."></textarea>
+                <button onclick="saveReflection()" class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg hover:bg-champagne transition">Save Reflection</button>
             </div>
-            <div id="todoList" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-2">
+        </div>
+
+        <div class="glass-card p-6 rounded-xl">
+            <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="todoInput" class="flex-1 bg-black/40 border border-dustygold/20 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-dustygold" placeholder="Add a goal...">
+                <button onclick="addTodo()" class="bg-dustygold/20 text-dustygold px-4 py-2 rounded-lg hover:bg-dustygold hover:text-black transition">Add</button>
+            </div>
+            <div id="todoList" class="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
                 </div>
         </div>
     </div>
@@ -181,76 +178,102 @@
    </main>
   </div>
   <script>
-   // --- JOURNAL & TODO LOGIC ---
-let selectedMood = '';
-
-// 1. Mood Tracker Function
-function setMood(mood, emoji) {
-    selectedMood = mood;
-    // Clears other highlights and adds it to the clicked one
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.classList.remove('bg-dustygold/20', 'border-dustygold');
-        if(btn.innerText === emoji) btn.classList.add('bg-dustygold/20', 'border-dustygold');
-    });
-}
-
-// 2. Add To-Do Function
-function addTodo() {
-    const input = document.getElementById('todoInput');
-    const list = document.getElementById('todoList');
-    const text = input.value.trim();
-
-    if (text === "") return; // Don't add empty tasks
-
-    const div = document.createElement('div');
-    div.className = "flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 group";
-    
-    // Using the same design style as your project
-    div.innerHTML = `
-        <div class="flex items-center gap-3">
-div.innerHTML = `
-        <div class="flex items-center gap-3">
-            <input type="checkbox" class="w-4 h-4 accent-dustygold cursor-pointer">
-            <span class="text-sm text-champagne/80">${text}</span>
-        </div>
-        <button onclick="this.parentElement.remove()" class="text-red-400/50 hover:text-red-400 transition-all">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-    `;
-        </div>
-        <button onclick="this.parentElement.remove()" class="text-red-400/50 hover:text-red-400 transition-all">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-    `;
-
-    list.prepend(div); // Adds new task to the top
-    input.value = ''; // Clear input
-    
-    // Refresh icons so the trash can appears
-    if(window.lucide) lucide.createIcons();
-}
-
-// 3. Save Reflection Function
-function saveReflection() {
-    const text = document.getElementById('journalInput').value;
-    if(!text && !selectedMood) return alert("Please add a mood or reflection!");
-    
-    alert("Reflection saved to your heart!");
-    document.getElementById('journalInput').value = '';
-}
     const adhkars = [
         { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" }, { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
         { ar: "اللَّهُ أَكْبَرُ", en: "Allahu Akbar" }, { ar: "أَسْتَغْفِرُ اللَّهَ", en: "Astaghfirullah" },
         { ar: "لَا إِلَهَ إِلَّا اللَّهُ", en: "La ilaha illallah" }
     ];
+   /* --- JOURNAL LOGIC START --- */
+let selectedMood = '';
+
+function setMood(emoji, btn) {
+    selectedMood = emoji;
+    // Makes all emojis gray, then "wakes up" the one you clicked
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.add('grayscale'));
+    btn.classList.remove('grayscale');
+}
+
+function addTodo() {
+    const input = document.getElementById('todoInput');
+    const list = document.getElementById('todoList');
+    if (input.value.trim() === '') return;
+
+    const div = document.createElement('div');
+    div.className = "flex items-center justify-between gap-3 p-3 bg-white/5 rounded-lg border border-white/10 group animate-in fade-in";
+    div.innerHTML = `
+        <div class="flex items-center gap-3">
+            <input type="checkbox" class="w-4 h-4 accent-dustygold cursor-pointer">
+            <span class="text-sm text-champagne/80">${input.value}</span>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-red-400/50 hover:text-red-500 transition">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+    list.prepend(div);
+    input.value = '';
+    if(window.lucide) lucide.createIcons(); 
+}
+
+function saveReflection() {
+    const text = document.getElementById('journalInput').value;
+    if(!text && !selectedMood) return alert("Please add a mood or reflection!");
+    alert("Reflection saved to your heart! (And this session)");
+    document.getElementById('journalInput').value = '';
+}
+/* --- JOURNAL LOGIC END --- */
 
     const namesOfAllah = [
-        { ar: "ٱلرَّحْمَٰنُ", tr: "Ar-Rahman" }, { ar: "ٱلرَّحِيمُ", tr: "Ar-Raheem" },
-        { ar: "ٱلْمَلِكُ", tr: "Al-Malik" }, { ar: "ٱلْقُدُّوسُ", tr: "Al-Quddus" },
-        { ar: "ٱلسَّلَامُ", tr: "As-Salam" }, { ar: "ٱلْمُؤْمِنُ", tr: "Al-Mu'min" },
-        { ar: "ٱلْمُهَيْمِنُ", tr: "Al-Muhaymin" }, { ar: "ٱلْعَزِيزُ", tr: "Al-Aziz" },
-        { ar: "ٱلْجَبَّارُ", tr: "Al-Jabbar" }, { ar: "ٱلْمُتَكَبِّرُ", tr: "Al-Mutakabbir" }
-    ];
+    { ar: "ٱلرَّحْمَٰنُ", tr: "Ar-Rahman" }, { ar: "ٱلرَّحِيمُ", tr: "Ar-Raheem" },
+    { ar: "ٱلْمَلِكُ", tr: "Al-Malik" }, { ar: "ٱلْقُدُّوسُ", tr: "Al-Quddus" },
+    { ar: "ٱلسَّلَٰمُ", tr: "As-Salam" }, { ar: "ٱلْمُؤْمِنُ", tr: "Al-Mu'min" },
+    { ar: "ٱلْمُهَيْمِنُ", tr: "Al-Muhaymin" }, { ar: "ٱلْعَزِيزُ", tr: "Al-Aziz" },
+    { ar: "ٱلْجَبَّارُ", tr: "Al-Jabbar" }, { ar: "ٱلْمُتَكَبِّرُ", tr: "Al-Mutakabbir" },
+    { ar: "ٱلْخَٰلِقُ", tr: "Al-Khaliq" }, { ar: "ٱلْبَارِئُ", tr: "Al-Bari'" },
+    { ar: "ٱلْمُصَوِّرُ", tr: "Al-Musawwir" }, { ar: "ٱلْغَفَّٰرُ", tr: "Al-Ghaffar" },
+    { ar: "ٱلْقَهَّٰرُ", tr: "Al-Qahhar" }, { ar: "ٱلْوَهَّابُ", tr: "Al-Wahhab" },
+    { ar: "ٱلرَّزَّاقُ", tr: "Ar-Razzaq" }, { ar: "ٱلْفَتَّاحُ", tr: "Al-Fattah" },
+    { ar: "ٱلْعَلِيمُ", tr: "Al-Alim" }, { ar: "ٱلْقَابِضُ", tr: "Al-Qabid" },
+    { ar: "ٱلْبَاسِطُ", tr: "Al-Basit" }, { ar: "ٱلْخَافِضُ", tr: "Al-Khafid" },
+    { ar: "ٱلرَّافِعُ", tr: "Ar-Rafi'" }, { ar: "ٱلْمُعِزُّ", tr: "Al-Mu'izz" },
+    { ar: "ٱلْمُذِلُّ", tr: "Al-Mudhill" }, { ar: "ٱلسَّمِيعُ", tr: "As-Sami'" },
+    { ar: "ٱلْبَصِيرُ", tr: "Al-Basir" }, { ar: "ٱلْحَكَمُ", tr: "Al-Hakam" },
+    { ar: "ٱلْعَدْلُ", tr: "Al-Adl" }, { ar: "ٱللَّطِيفُ", tr: "Al-Latif" },
+    { ar: "ٱلْخَبِيرُ", tr: "Al-Khabir" }, { ar: "ٱلْحَلِيمُ", tr: "Al-Halim" },
+    { ar: "ٱلْعَظِيمُ", tr: "Al-Azim" }, { ar: "ٱلْغَفُورُ", tr: "Al-Ghafur" },
+    { ar: "ٱلشَّكُورُ", tr: "Ash-Shakur" }, { ar: "ٱلْعَلِيُّ", tr: "Al-Aliy" },
+    { ar: "ٱلْكَبِيرُ", tr: "Al-Kabir" }, { ar: "ٱلْحَفِيظُ", tr: "Al-Hafiz" },
+    { ar: "ٱلْمُقِيتُ", tr: "Al-Muqit" }, { ar: "ٱلْحَسِيبُ", tr: "Al-Hasib" },
+    { ar: "ٱلْجَلِيلُ", tr: "Al-Jalil" }, { ar: "ٱلْكَرِيمُ", tr: "Al-Karim" },
+    { ar: "ٱلرَّقِيبُ", tr: "Ar-Raqib" }, { ar: "ٱلْمُجِيبُ", tr: "Al-Mujib" },
+    { ar: "ٱلْوَٰسِعُ", tr: "Al-Wasi'" }, { ar: "ٱلْحَكِيمُ", tr: "Al-Hakim" },
+    { ar: "ٱلْوَدُودُ", tr: "Al-Wadud" }, { ar: "ٱلْمَجِيدُ", tr: "Al-Majid" },
+    { ar: "ٱلْبَاعِثُ", tr: "Al-Ba'ith" }, { ar: "ٱلشَّهِيدُ", tr: "Ash-Shahid" },
+    { ar: "ٱلْحَقُّ", tr: "Al-Haqq" }, { ar: "ٱلْوَكِيلُ", tr: "Al-Wakil" },
+    { ar: "ٱلْقَوِيُّ", tr: "Al-Qawiy" }, { ar: "ٱلْمَتِينُ", tr: "Al-Matin" },
+    { ar: "ٱلْوَلِيُّ", tr: "Al-Wali" }, { ar: "ٱلْحَمِيدُ", tr: "Al-Hamid" },
+    { ar: "ٱلْمُحْصِي", tr: "Al-Muhsi" }, { ar: "ٱلْمُبْدِئُ", tr: "Al-Mubdi'" },
+    { ar: "ٱلْمُعِيدُ", tr: "Al-Mu'id" }, { ar: "ٱلْمُحْيِي", tr: "Al-Muhyi" },
+    { ar: "ٱلْمُمِيتُ", tr: "Al-Mumit" }, { ar: "ٱلْحَيُّ", tr: "Al-Hayy" },
+    { ar: "ٱلْقَيُّومُ", tr: "Al-Qayyum" }, { ar: "ٱلْوَاجِدُ", tr: "Al-Wajid" },
+    { ar: "ٱلْمَاجِدُ", tr: "Al-Majid" }, { ar: "ٱلْوَٰحِدُ", tr: "Al-Wahid" },
+    { ar: "ٱلْأَحَدُ", tr: "Al-Ahad" }, { ar: "ٱلصَّمَدُ", tr: "As-Samad" },
+    { ar: "ٱلْقَٰدِرُ", tr: "Al-Qadir" }, { ar: "ٱلْمُقْتَدِرُ", tr: "Al-Muqtadir" },
+    { ar: "ٱلْمُقَدِّمُ", tr: "Al-Muqaddim" }, { ar: "ٱلْمُؤَخِّرُ", tr: "Al-Mu'akhkhir" },
+    { ar: "ٱلْأَوَّلُ", tr: "Al-Awwal" }, { ar: "ٱلْآخِرُ", tr: "Al-Akhir" },
+    { ar: "ٱلظَّٰهِرُ", tr: "Az-Zahir" }, { ar: "ٱلْبَاطِنُ", tr: "Al-Batin" },
+    { ar: "ٱلْوَالِي", tr: "Al-Wali" }, { ar: "ٱلْمُتَعَالِي", tr: "Al-Muta'ali" },
+    { ar: "ٱلْبَرُّ", tr: "Al-Barr" }, { ar: "ٱلتَّوَّابُ", tr: "At-Tawwab" },
+    { ar: "ٱلْمُنْتَقِمُ", tr: "Al-Muntaqim" }, { ar: "ٱلْعَفُوُّ", tr: "Al-Afuww" },
+    { ar: "ٱلرَّءُوفُ", tr: "Ar-Ra'uf" }, { ar: "مَٰلِكُ ٱلْمُلْكِ", tr: "Malik-ul-Mulk" },
+    { ar: "ذُو ٱلْجَلَٰلِ وَٱلْإِكْرَامِ", tr: "Dhul-Jalali-wal-Ikram" }, { ar: "ٱلْمُقْسِطُ", tr: "Al-Muqsit" },
+    { ar: "ٱلْجَامِعُ", tr: "Al-Jami'" }, { ar: "ٱلْغَنِيُّ", tr: "Al-Ghani" },
+    { ar: "ٱلْمُغْنِي", tr: "Al-Mughni" }, { ar: "ٱلْمَانِعُ", tr: "Al-Mani'" },
+    { ar: "ٱلضَّارُّ", tr: "Ad-Darr" }, { ar: "ٱلنَّافِعُ", tr: "An-Nafi'" },
+    { ar: "ٱلنُّورُ", tr: "An-Nur" }, { ar: "ٱلْهَادِي", tr: "Al-Hadi" },
+    { ar: "ٱلْبَدِيعُ", tr: "Al-Badi'" }, { ar: "ٱلْبَاقِي", tr: "Al-Baqi" },
+    { ar: "ٱلْوَارِثُ", tr: "Al-Warith" }, { ar: "ٱلرَّشِيدُ", tr: "Ar-Rashid" },
+    { ar: "ٱلصَّبُورُ", tr: "As-Sabur" }
+];
 
     const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatthir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"];
 
@@ -348,53 +371,39 @@ function saveReflection() {
         const noSelect = document.getElementById('noSelectQuran');
         const audio = document.getElementById('mainAudio');
         
-        // UI Reset
         noSelect.classList.add('hidden');
         content.innerHTML = '';
         loading.classList.remove('hidden');
 
-        // 1. Set Mishary Alafasy Audio
-        const paddedId = id.toString().padStart(3, '0');
-        audio.src = `https://server8.mp3quran.net/afs/${paddedId}.mp3`;
-        audio.load();
+        const num = id.toString().padStart(3, '0');
+        audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
+        audio.play();
 
         try {
-            // 2. Fetch Arabic (Uthmani) and English (Sahih International)
             const [arRes, enRes] = await Promise.all([
-                fetch(`https://api.alquran.cloud/v1/surah/${id}/quran-uthmani`),
+                fetch(`https://api.alquran.cloud/v1/surah/${id}`),
                 fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`)
             ]);
             
             const arData = await arRes.json();
             const enData = await enRes.json();
             
-            // 3. Update Header
             document.getElementById('surahTitleAr').innerText = arData.data.name;
-            document.getElementById('surahTitleEn').innerText = `${name} — ${arData.data.englishNameTranslation}`;
+            document.getElementById('surahTitleEn').innerText = `${name} - ${arData.data.englishNameTranslation}`;
             
-            // 4. Render Verses
             arData.data.ayahs.forEach((ayah, i) => {
                 const div = document.createElement('div');
-                div.className = "verse-container group hover:bg-white/5 transition-colors duration-300 px-4 rounded-lg border-b border-dustygold/10 py-8";
+                div.className = "verse-container";
                 div.innerHTML = `
-                    <div class="text-right font-amiri text-3xl text-dustygold mb-6 leading-[2.8] tracking-wide">
-                        ${ayah.text}
-                    </div>
-                    <div class="text-champagne/80 text-sm leading-relaxed border-l-2 border-dustygold/30 pl-4 italic">
-                        <span class="text-dustygold/50 font-bold mr-2">verse ${ayah.numberInSurah}</span> 
-                        ${enData.data.ayahs[i].text}
-                    </div>
+                    <div class="text-right font-amiri text-2xl text-dustygold mb-3 leading-loose">${ayah.text}</div>
+                    <div class="text-champagne/80 text-sm leading-relaxed"><span class="text-dustygold/50 mr-2">[${ayah.numberInSurah}]</span> ${enData.data.ayahs[i].text}</div>
                 `;
                 content.appendChild(div);
             });
-
         } catch (error) {
-            console.error("Error:", error);
-            content.innerHTML = '<p class="text-red-500 text-center p-10">Unable to load Surah. Please check your connection.</p>';
+            content.innerHTML = '<p class="text-red-500">Error loading verses. Please check your connection.</p>';
         } finally {
             loading.classList.add('hidden');
-            // Scroll back to top of the reading area
-            document.getElementById('verseDisplay').scrollTo({top: 0, behavior: 'smooth'});
         }
     }
 
@@ -405,48 +414,53 @@ function saveReflection() {
         zone.appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
     }
-  </script>
-  <div id="mobileNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-dustygold/20 flex justify-around items-center p-2 pb-6 z-50">
-    <button data-page="tasbeeh" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+   
+</script>
+
+<div id="mobileNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-dustygold/20 flex justify-around items-center p-2 pb-6 z-50">
+    <button data-page="tasbeeh" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
         <i data-lucide="hash" class="w-5 h-5"></i>
         <span class="text-[9px] uppercase font-medium">Tasbeeh</span>
     </button>
-    <button data-page="quran" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+    <button data-page="quran" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
         <i data-lucide="book-open" class="w-5 h-5"></i>
         <span class="text-[9px] uppercase font-medium">Quran</span>
     </button>
-    <button data-page="dhikr" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+    <button data-page="dhikr" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
         <i data-lucide="library" class="w-5 h-5"></i>
         <span class="text-[9px] uppercase font-medium">Dhikr</span>
     </button>
-    <button data-page="beauty" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
+    <button data-page="beauty" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
         <i data-lucide="sparkles" class="w-5 h-5"></i>
         <span class="text-[9px] uppercase font-medium">Beauty</span>
     </button>
-    <button data-page="journal" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1 transition-all">
-        <i data-lucide="pen-tool" class="w-5 h-5"></i>
-        <span class="text-[9px] uppercase font-medium">Journal</span>
-    </button>
-</div>
+<button data-page="journal" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
+            <i data-lucide="pen-tool" class="w-5 h-5"></i>
+            <span class="text-[9px] uppercase font-medium">Journal</span>
+        </button>
+    </div> <script> document.querySelectorAll('#mobileNav [data-page]').forEach(btn => {
+            btn.onclick = () => {
+                const pageId = btn.dataset.page;
+                // Hide all page sections
+                document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+                
+                // Dim all navigation icons (both sidebar and mobile bar)
+                document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(n => {
+                    n.classList.remove('active', 'text-dustygold');
+                    n.classList.add('text-dustygold/40');
+                });
 
-<script>
-    // Logic to sync mobile nav with page sections
-    document.querySelectorAll('#mobileNav [data-page]').forEach(btn => {
-        btn.onclick = () => {
-            const pageId = btn.dataset.page;
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(n => {
-                n.classList.remove('active', 'text-dustygold');
-                n.classList.add('text-dustygold/40');
-            });
-            const targetPage = document.getElementById(`${pageId}-page`);
-            if(targetPage) targetPage.classList.remove('hidden');
-            document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el => {
-                el.classList.add('active', 'text-dustygold');
-                el.classList.remove('text-dustygold/40');
-            });
-        };
-    });
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e2e6746e178c169',t:'MTc3NDYxNDU5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+                // Show the specific page you clicked
+                const target = document.getElementById(`${pageId}-page`);
+                if(target) target.classList.remove('hidden');
+
+                // Highlight the specific icons you clicked
+                document.querySelectorAll(`[data-page="${pageId}"]`).forEach(el => {
+                    el.classList.add('active', 'text-dustygold');
+                    el.classList.remove('text-dustygold/40');
+                });
+            };
+        });
+    </script>
+</body>
 </html>
