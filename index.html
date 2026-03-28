@@ -143,23 +143,101 @@
       <div id="namesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
      </div>
     </section>
-    <section id="journal-page" class="page-content hidden p-8">
-     <div class="grid md:grid-cols-2 gap-8">
-      <div class="glass-card p-6 rounded-xl">
-       <h3 class="text-dustygold font-bold mb-4">Daily Reflection</h3><textarea class="w-full bg-black/40 border border-dustygold/20 rounded-lg p-4 h-40 focus:outline-none focus:border-dustygold text-champagne" placeholder="Reflect on your day..."></textarea> <button class="mt-4 w-full bg-dustygold text-black font-bold py-2 rounded-lg">Save Reflection</button>
-      </div>
-      <div class="glass-card p-6 rounded-xl">
-       <h3 class="text-dustygold font-bold mb-4">Spiritual To-do</h3>
-       <div id="todoList" class="space-y-3">
-        <div class="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10"><input type="checkbox" class="w-4 h-4 accent-dustygold"> <span class="text-sm">Morning Adhkar</span>
+   <section id="journal-page" class="page-content hidden p-8 max-w-5xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+            <div class="glass-card p-6 rounded-xl">
+                <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
+                    <i data-lucide="smile"></i> How are you feeling?
+                </h3>
+                <div class="flex justify-between gap-2" id="moodTracker">
+                    <button onclick="setMood('blessed', '✨')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">✨</button>
+                    <button onclick="setMood('peaceful', '🌿')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">🌿</button>
+                    <button onclick="setMood('grateful', '🤲')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">🤲</button>
+                    <button onclick="setMood('tired', '😴')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">😴</button>
+                    <button onclick="setMood('struggling', '⏳')" class="mood-btn flex-1 p-3 rounded-lg bg-white/5 border border-white/10 hover:border-dustygold transition-all text-2xl">⏳</button>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl">
+                <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
+                    <i data-lucide="pen-tool"></i> Daily Reflection
+                </h3>
+               <textarea id="journalInput" class="..." placeholder="What's on your heart?"></textarea>
+            <h3 class="text-dustygold font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="check-square"></i> Spiritual Goals
+            </h3>
+            <div class="flex gap-2 mb-6">
+                <input type="text" id="todoInput" class="flex-1 bg-black/40 border border-dustygold/20 rounded-lg px-4 py-2 focus:outline-none focus:border-dustygold text-sm" placeholder="Add a new goal...">
+                <button onclick="addTodo()" class="bg-dustygold/20 text-dustygold px-4 py-2 rounded-lg border border-dustygold/30 hover:bg-dustygold hover:text-black transition-all">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="todoList" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-2">
+                </div>
         </div>
-       </div>
-      </div>
-     </div>
-    </section>
+    </div>
+</section>
    </main>
   </div>
   <script>
+   // --- JOURNAL & TODO LOGIC ---
+let selectedMood = '';
+
+// 1. Mood Tracker Function
+function setMood(mood, emoji) {
+    selectedMood = mood;
+    // Clears other highlights and adds it to the clicked one
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.classList.remove('bg-dustygold/20', 'border-dustygold');
+        if(btn.innerText === emoji) btn.classList.add('bg-dustygold/20', 'border-dustygold');
+    });
+}
+
+// 2. Add To-Do Function
+function addTodo() {
+    const input = document.getElementById('todoInput');
+    const list = document.getElementById('todoList');
+    const text = input.value.trim();
+
+    if (text === "") return; // Don't add empty tasks
+
+    const div = document.createElement('div');
+    div.className = "flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 group";
+    
+    // Using the same design style as your project
+    div.innerHTML = `
+        <div class="flex items-center gap-3">
+div.innerHTML = `
+        <div class="flex items-center gap-3">
+            <input type="checkbox" class="w-4 h-4 accent-dustygold cursor-pointer">
+            <span class="text-sm text-champagne/80">${text}</span>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-red-400/50 hover:text-red-400 transition-all">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-red-400/50 hover:text-red-400 transition-all">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    `;
+
+    list.prepend(div); // Adds new task to the top
+    input.value = ''; // Clear input
+    
+    // Refresh icons so the trash can appears
+    if(window.lucide) lucide.createIcons();
+}
+
+// 3. Save Reflection Function
+function saveReflection() {
+    const text = document.getElementById('journalInput').value;
+    if(!text && !selectedMood) return alert("Please add a mood or reflection!");
+    
+    alert("Reflection saved to your heart!");
+    document.getElementById('journalInput').value = '';
+}
     const adhkars = [
         { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" }, { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
         { ar: "اللَّهُ أَكْبَرُ", en: "Allahu Akbar" }, { ar: "أَسْتَغْفِرُ اللَّهَ", en: "Astaghfirullah" },
