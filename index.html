@@ -275,8 +275,6 @@ function saveReflection() {
     { ar: "ٱلصَّبُورُ", tr: "As-Sabur" }
 ];
 
-    const surahs = ["Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatthir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takathur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"];
-
     const dhikrDetails = [
         { ar: "سُبْحَانَ اللَّهِ", en: "Glory be to Allah", virtue: "A tree is planted in Paradise for every recital." },
         { ar: "الْحَمْدُ لِلَّهِ", en: "All praise is due to Allah", virtue: "Fills the scale of good deeds." },
@@ -461,6 +459,164 @@ function saveReflection() {
                 });
             };
         });
-    </script>
+     // 1. DATA: The list of 114 Surahs
+const SURAHS = [
+  {n:1,name:"Al-Faatiha",en:"The Opening",ar:"الفَاتِحَةِ"},
+  {n:2,name:"Al-Baqara",en:"The Cow",ar:"البَقَرَةِ"},
+  {n:3,name:"Aal-i-Imraan",en:"The Family of Imraan",ar:"آلِ عِمۡرَانَ"},
+  {n:4,name:"An-Nisaa",en:"The Women",ar:"النِّسَاءِ"},
+  {n:5,name:"Al-Maaida",en:"The Table",ar:"المَائـِدَةِ"},
+  {n:6,name:"Al-An'aam",en:"The Cattle",ar:"الأَنۡعَامِ"},
+  {n:7,name:"Al-A'raaf",en:"The Heights",ar:"الأَعۡرَافِ"},
+  {n:8,name:"Al-Anfaal",en:"The Spoils of War",ar:"الأَنفَالِ"},
+  {n:9,name:"At-Tawba",en:"The Repentance",ar:"التَّوۡبَةِ"},
+  {n:10,name:"Yunus",en:"Jonas",ar:"يُونُسَ"},
+  {n:11,name:"Hud",en:"Hud",ar:"هُودٍ"},
+  {n:12,name:"Yusuf",en:"Joseph",ar:"يُوسُفَ"},
+  {n:13,name:"Ar-Ra'd",en:"The Thunder",ar:"الرَّعۡدِ"},
+  {n:14,name:"Ibrahim",en:"Abraham",ar:"إِبۡرَاهِيمَ"},
+  {n:15,name:"Al-Hijr",en:"The Rock",ar:"الحِجۡرِ"},
+  {n:16,name:"An-Nahl",en:"The Bee",ar:"النَّحۡلِ"},
+  {n:17,name:"Al-Israa",en:"The Night Journey",ar:"الإِسۡرَاءِ"},
+  {n:18,name:"Al-Kahf",en:"The Cave",ar:"الكَهۡفِ"},
+  {n:19,name:"Maryam",en:"Mary",ar:"مَرۡيَمَ"},
+  {n:20,name:"Taa-Haa",en:"Taa-Haa",ar:"طه"},
+  {n:21,name:"Al-Anbiyaa",en:"The Prophets",ar:"الأَنبِيَاءِ"},
+  {n:22,name:"Al-Hajj",en:"The Pilgrimage",ar:"الحَجِّ"},
+  {n:23,name:"Al-Muminoon",en:"The Believers",ar:"المُؤۡمِنُونَ"},
+  {n:24,name:"An-Noor",en:"The Light",ar:"النُّورِ"},
+  {n:25,name:"Al-Furqaan",en:"The Criterion",ar:"الفُرۡقَانِ"},
+  {n:26,name:"Ash-Shu'araa",en:"The Poets",ar:"الشُّعَرَاءِ"},
+  {n:27,name:"An-Naml",en:"The Ant",ar:"النَّمۡلِ"},
+  {n:28,name:"Al-Qasas",en:"The Stories",ar:"القَصَصِ"},
+  {n:29,name:"Al-Ankaboot",en:"The Spider",ar:"العَنكَبُوتِ"},
+  {n:30,name:"Ar-Room",en:"The Romans",ar:"الرُّومِ"},
+  {n:31,name:"Luqman",en:"Luqman",ar:"لُقۡمَانَ"},
+  {n:32,name:"As-Sajda",en:"The Prostration",ar:"السَّجۡدَةِ"},
+  {n:33,name:"Al-Ahzaab",en:"The Clans",ar:"الأَحۡزَابِ"},
+  {n:34,name:"Saba",en:"Sheba",ar:"سَبَإٍ"},
+  {n:35,name:"Faatir",en:"The Originator",ar:"فَاطِرٍ"},
+  {n:36,name:"Yaseen",en:"Yaseen",ar:"يسٓ"},
+  {n:37,name:"As-Saaffaat",en:"Those drawn up in Ranks",ar:"الصَّافَّاتِ"},
+  {n:38,name:"Saad",en:"The letter Saad",ar:"صٓ"},
+  {n:39,name:"Az-Zumar",en:"The Groups",ar:"الزُّمَرِ"},
+  {n:40,name:"Ghafir",en:"The Forgiver",ar:"غَافِرٍ"},
+  {n:41,name:"Fussilat",en:"Explained in detail",ar:"فُصِّلَتۡ"},
+  {n:42,name:"Ash-Shura",en:"Consultation",ar:"الشُّورَىٰ"},
+  {n:43,name:"Az-Zukhruf",en:"Ornaments of gold",ar:"الزُّخۡرُفِ"},
+  {n:44,name:"Ad-Dukhaan",en:"The Smoke",ar:"الدُّخَانِ"},
+  {n:45,name:"Al-Jaathiya",en:"Crouching",ar:"الجَاثِيَةِ"},
+  {n:46,name:"Al-Ahqaf",en:"The Dunes",ar:"الأَحۡقَافِ"},
+  {n:47,name:"Muhammad",en:"Muhammad",ar:"مُحَمَّدٍ"},
+  {n:48,name:"Al-Fath",en:"The Victory",ar:"الفَتۡحِ"},
+  {n:49,name:"Al-Hujuraat",en:"The Inner Apartments",ar:"الحُجُرَاتِ"},
+  {n:50,name:"Qaaf",en:"The letter Qaaf",ar:"قٓ"},
+  {n:51,name:"Adh-Dhaariyat",en:"The Winnowing Winds",ar:"الذَّارِيَاتِ"},
+  {n:52,name:"At-Tur",en:"The Mount",ar:"الطُّورِ"},
+  {n:53,name:"An-Najm",en:"The Star",ar:"النَّجۡمِ"},
+  {n:54,name:"Al-Qamar",en:"The Moon",ar:"القَمَرِ"},
+  {n:55,name:"Ar-Rahmaan",en:"The Beneficent",ar:"الرَّحۡمَٰن"},
+  {n:56,name:"Al-Waaqia",en:"The Inevitable",ar:"الوَاقِعَةِ"},
+  {n:57,name:"Al-Hadid",en:"The Iron",ar:"الحَدِيدِ"},
+  {n:58,name:"Al-Mujaadila",en:"The Pleading Woman",ar:"المُجَادلَةِ"},
+  {n:59,name:"Al-Hashr",en:"The Exile",ar:"الحَشۡرِ"},
+  {n:60,name:"Al-Mumtahana",en:"She that is to be examined",ar:"المُمۡتَحنَةِ"},
+  {n:61,name:"As-Saff",en:"The Ranks",ar:"الصَّفِّ"},
+  {n:62,name:"Al-Jumu'a",en:"Friday",ar:"الجُمُعَةِ"},
+  {n:63,name:"Al-Munaafiqoon",en:"The Hypocrites",ar:"المُنَافِقُونَ"},
+  {n:64,name:"At-Taghaabun",en:"Mutual Disillusion",ar:"التَّغَابُنِ"},
+  {n:65,name:"At-Talaaq",en:"Divorce",ar:"الطَّلَاقِ"},
+  {n:66,name:"At-Tahrim",en:"The Prohibition",ar:"التَّحۡرِيمِ"},
+  {n:67,name:"Al-Mulk",en:"The Sovereignty",ar:"المُلۡكِ"},
+  {n:68,name:"Al-Qalam",en:"The Pen",ar:"القَلَمِ"},
+  {n:69,name:"Al-Haaqqa",en:"The Reality",ar:"الحَاقَّةِ"},
+  {n:70,name:"Al-Ma'aarij",en:"The Ascending Stairways",ar:"المَعَارِجِ"},
+  {n:71,name:"Nooh",en:"Noah",ar:"نُوحٍ"},
+  {n:72,name:"Al-Jinn",en:"The Jinn",ar:"الجِنِّ"},
+  {n:73,name:"Al-Muzzammil",en:"The Enshrouded One",ar:"المُزَّمِّلِ"},
+  {n:74,name:"Al-Muddaththir",en:"The Cloaked One",ar:"المُدَّثِّرِ"},
+  {n:75,name:"Al-Qiyaama",en:"The Resurrection",ar:"القِيَامَةِ"},
+  {n:76,name:"Al-Insaan",en:"Man",ar:"الإِنسَانِ"},
+  {n:77,name:"Al-Mursalaat",en:"The Emissaries",ar:"المُرۡسَلَاتِ"},
+  {n:78,name:"An-Naba",en:"The Announcement",ar:"النَّبَإِ"},
+  {n:79,name:"An-Naazi'aat",en:"Those who drag forth",ar:"النَّازِعَاتِ"},
+  {n:80,name:"Abasa",en:"He frowned",ar:"عَبَسَ"},
+  {n:81,name:"At-Takwir",en:"The Overthrowing",ar:"التَّكۡوِيرِ"},
+  {n:82,name:"Al-Infitaar",en:"The Cleaving",ar:"الانفِطَارِ"},
+  {n:83,name:"Al-Mutaffifin",en:"Defrauding",ar:"المُطَفِّفِينَ"},
+  {n:84,name:"Al-Inshiqaaq",en:"The Splitting Open",ar:"الانشِقَاقِ"},
+  {n:85,name:"Al-Burooj",en:"The Constellations",ar:"البُرُوجِ"},
+  {n:86,name:"At-Taariq",en:"The Morning Star",ar:"الطَّارِقِ"},
+  {n:87,name:"Al-A'laa",en:"The Most High",ar:"الأَعۡلَىٰ"},
+  {n:88,name:"Al-Ghaashiya",en:"The Overwhelming",ar:"الغَاشِيَةِ"},
+  {n:89,name:"Al-Fajr",en:"The Dawn",ar:"الفَجۡرِ"},
+  {n:90,name:"Al-Balad",en:"The City",ar:"البَلَدِ"},
+  {n:91,name:"Ash-Shams",en:"The Sun",ar:"الشَّمۡسِ"},
+  {n:92,name:"Al-Lail",en:"The Night",ar:"اللَّيۡلِ"},
+  {n:93,name:"Ad-Dhuhaa",en:"The Morning Hours",ar:"الضُّحَىٰ"},
+  {n:94,name:"Ash-Sharh",en:"The Consolation",ar:"الشَّرۡحِ"},
+  {n:95,name:"At-Tin",en:"The Fig",ar:"التِّينِ"},
+  {n:96,name:"Al-Alaq",en:"The Clot",ar:"العَلَقِ"},
+  {n:97,name:"Al-Qadr",en:"The Power, Fate",ar:"القَدۡرِ"},
+  {n:98,name:"Al-Bayyina",en:"The Evidence",ar:"البَيِّنَةِ"},
+  {n:99,name:"Az-Zalzala",en:"The Earthquake",ar:"الزَّلۡزَلَةِ"},
+  {n:100,name:"Al-Aadiyaat",en:"The Chargers",ar:"العَادِيَاتِ"},
+  {n:101,name:"Al-Qaari'a",en:"The Calamity",ar:"القَارِعَةِ"},
+  {n:102,name:"At-Takaathur",en:"Competition",ar:"التَّكَاثُرِ"},
+  {n:103,name:"Al-Asr",en:"The Declining Day",ar:"العَصۡرِ"},
+  {n:104,name:"Al-Humaza",en:"The Traducer",ar:"الهُمَزَةِ"},
+  {n:105,name:"Al-Fil",en:"The Elephant",ar:"الفِيلِ"},
+  {n:106,name:"Quraish",en:"Quraysh",ar:"قُرَيۡشٍ"},
+  {n:107,name:"Al-Maa'un",en:"Almsgiving",ar:"المَاعُونِ"},
+  {n:108,name:"Al-Kawthar",en:"Abundance",ar:"الكَوۡثَرِ"},
+  {n:109,name:"Al-Kaafiroon",en:"The Disbelievers",ar:"الكَافِرُونَ"},
+  {n:110,name:"An-Nasr",en:"Divine Support",ar:"النَّصۡرِ"},
+  {n:111,name:"Al-Masad",en:"The Palm Fibre",ar:"المَسَدِ"},
+  {n:112,name:"Al-Ikhlaas",en:"Sincerity",ar:"الإِخۡلَاصِ"},
+  {n:113,name:"Al-Falaq",en:"The Dawn",ar:"الفَلَقِ"},
+  {n:114,name:"An-Naas",en:"Mankind",ar:"النَّاسِ"}
+];
+
+// 2. LOGIC: Make the 3 circles work
+function initQuranApp() {
+    const list = document.getElementById('surahList');
+    if(list) {
+        list.innerHTML = SURAHS.map(s => `
+            <button onclick="loadSurah(${s.n})" class="w-full text-left p-3 hover:bg-white/5 rounded border-b border-white/5 flex justify-between">
+                <span>${s.n}. ${s.name}</span>
+                <span class="font-amiri opacity-50">${s.ar}</span>
+            </button>
+        `).join('');
+    }
+}
+
+async function loadSurah(n) {
+    const display = document.getElementById('verseDisplay');
+    const arTitle = document.getElementById('surahTitleAr');
+    const enTitle = document.getElementById('surahTitleEn');
+    const audio = document.getElementById('mainAudio');
+    const noSelect = document.getElementById('noSelectQuran');
+
+    if(noSelect) noSelect.style.display = 'none';
+    display.innerHTML = '<p class="text-center opacity-50">Loading Holy Quran...</p>';
+
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${n}/editions/quran-uthmani,en.asad,ar.alafasy`);
+    const data = await res.json();
+
+    arTitle.innerText = data.data[0].name;
+    enTitle.innerText = data.data[0].englishName;
+    audio.src = data.data[2].ayahs[0].audio;
+
+    display.innerHTML = data.data[0].ayahs.map((a, i) => `
+        <div class="mb-10 pb-6 border-b border-white/5">
+            <p class="text-right text-3xl font-amiri text-dustygold mb-4">${a.text} <span class="text-xs border px-2 py-1 rounded-full">${a.numberInSurah}</span></p>
+            <p class="text-left text-sm text-white/60 italic">${data.data[1].ayahs[i].text}</p>
+        </div>
+    `).join('');
+}
+
+// Kickstart the list
+initQuranApp();
+    </script>    
 </body>
 </html>
