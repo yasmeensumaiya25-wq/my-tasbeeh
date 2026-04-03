@@ -1,3 +1,3 @@
 self.addEventListener('fetch', (event) => {
-    // This allows the app to load from the cache
+  // This can be empty for now, but it must exist!
 });
