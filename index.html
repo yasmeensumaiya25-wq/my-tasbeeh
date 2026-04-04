@@ -73,8 +73,7 @@
     }
 
     .dir-rtl { direction: rtl; }
-    /* Updated Tafseer Box Style */
-    .tafseer-box { background: rgba(216, 180, 254, 0.15); border: 1px solid rgba(216, 180, 254, 0.4); }
+    .tafseer-box { background: rgba(216, 180, 254, 0.1); border: 1px solid rgba(216, 180, 254, 0.25); }
   </style>
  </head>
  <body class="h-full">
@@ -157,6 +156,7 @@
       </div>
     </section>
 
+    <!-- Dhikr, Beauty, Journal Sections remain unchanged -->
     <section id="dhikr-page" class="page-content hidden p-8">
      <div class="text-center mb-12">
       <h2 class="text-4xl font-amiri text-dustygold mb-2">Dhikr Library</h2>
@@ -218,6 +218,7 @@
    </main>
   </div>
 
+  <!-- Mobile Nav -->
   <div id="mobileNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-dustygold/20 flex justify-around items-center p-2 pb-6 z-50">
     <button data-page="tasbeeh" class="mobile-nav-item text-dustygold/40 flex flex-col items-center gap-1">
         <i data-lucide="hash" class="w-5 h-5"></i>
@@ -242,6 +243,7 @@
   </div>
 
   <script>
+    // Configuration Data
     const adhkars = [
         { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" }, { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
         { ar: "اللَّهُ أَكْبَرُ", en: "Allahu Akbar" }, { ar: "أَسْتَغْفِرُ اللَّهَ", en: "Astaghfirullah" },
@@ -430,6 +432,7 @@
         };
     }
 
+    // UPDATED FUNCTION: Now includes en.jalalayn translation
     async function loadFullSurah(id, name) {
         const content = document.getElementById('versesContent');
         const loading = document.getElementById('loadingQuran');
@@ -446,16 +449,18 @@
         audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
         
         try {
-            // Using Al-Jalalayn Tafseer (Arabic) as the primary in-depth source used by Quran.com
-            const [arRes, enRes, tafRes] = await Promise.all([
+            // Added en.jalalayn to the fetch requests
+            const [arRes, enRes, tafArRes, tafEnRes] = await Promise.all([
                 fetch(`https://api.alquran.cloud/v1/surah/${id}`),
                 fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`),
-                fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.jalalayn`)
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.jalalayn`),
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.jalalayn`)
             ]);
             
             const arData = await arRes.json();
             const enData = await enRes.json();
-            const tafData = await tafRes.json();
+            const tafArData = await tafArRes.json();
+            const tafEnData = await tafEnRes.json();
 
             // Set Meta Data
             document.getElementById('metaJuz').innerText = `Juz ${arData.data.ayahs[0].juz}`;
@@ -488,8 +493,11 @@
                         </div>
                         <div class="w-full max-w-2xl tafseer-box p-5 rounded-xl text-sm shadow-lg">
                             <p class="text-[10px] uppercase tracking-[0.2em] text-pastelPurple mb-3 font-bold">Tafsir Al-Jalalayn Insight</p>
-                            <p class="text-pastelPurple/90 text-xl leading-relaxed font-amiri dir-rtl">
-                                ${tafData.data.ayahs[i].text}
+                            <p class="text-pastelPurple/90 text-xl leading-relaxed font-amiri dir-rtl mb-4 border-b border-pastelPurple/10 pb-4">
+                                ${tafArData.data.ayahs[i].text}
+                            </p>
+                            <p class="text-pastelPurple/70 text-sm leading-relaxed italic font-light">
+                                ${tafEnData.data.ayahs[i].text}
                             </p>
                         </div>
                     </div>
