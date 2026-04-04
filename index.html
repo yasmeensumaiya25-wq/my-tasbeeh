@@ -70,6 +70,8 @@
         appearance: none;
         cursor: pointer;
     }
+
+    .dir-rtl { direction: rtl; }
   </style>
  </head>
  <body class="h-full">
@@ -113,37 +115,47 @@
      </div>
     </section>
 
-    <!-- Rest of the sections remain unchanged -->
-    <section id="quran-page" class="page-content hidden p-4 md:p-8 h-full flex flex-col">
-     <div class="flex flex-col md:flex-row gap-6 h-full overflow-hidden">
-      <div class="w-full md:w-80 glass-card rounded-xl p-4 overflow-y-auto custom-scrollbar flex-shrink-0">
-       <h3 class="text-dustygold font-amiri text-xl mb-4 border-b border-dustygold/20 pb-2">Select Surah</h3>
-       <select id="surah-dropdown" class="surah-select mb-4">
-           <option value="">Choose a Surah...</option>
-       </select>
-       <div id="surahList" class="hidden md:block space-y-1"></div>
+    <!-- START UPDATED QURAN SECTION -->
+    <section id="quran-page" class="page-content hidden p-4 md:p-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Top Selection Bar -->
+        <div class="glass-card rounded-2xl p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-0 z-10">
+          <div class="relative w-full md:w-64">
+            <select id="surah-dropdown" class="surah-select !bg-charcoal !border-dustygold/30 focus:border-dustygold transition-all text-sm">
+              <option value="">Select Surah...</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-4 w-full md:w-auto justify-center">
+            <audio id="mainAudio" controls class="h-8 opacity-80 hover:opacity-100 transition-opacity"></audio>
+          </div>
+        </div>
+
+        <!-- Surah Display Area -->
+        <div id="quran-reader-container">
+          <div id="noSelectQuran" class="py-20 flex flex-col items-center justify-center opacity-30 text-center">
+            <i data-lucide="book-open" class="w-16 h-16 mb-4"></i>
+            <p class="font-light tracking-wide">Select a Surah to begin reading</p>
+          </div>
+
+          <div id="loadingQuran" class="hidden py-20 flex items-center justify-center">
+            <div class="loading-spinner"></div>
+          </div>
+
+          <!-- Surah Header (Bismillah) -->
+          <div id="surahHeaderInfo" class="hidden text-center mb-12">
+            <h2 id="surahTitleAr" class="text-6xl font-amiri text-dustygold mb-2"></h2>
+            <p id="surahTitleEn" class="text-champagne/40 uppercase tracking-[0.2em] text-xs mb-8"></p>
+            <div id="bismillahAr" class="text-4xl font-amiri text-dustygold/90 py-6 border-y border-dustygold/10">
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </div>
+          </div>
+
+          <!-- Verses -->
+          <div id="versesContent" class="space-y-0"></div>
+        </div>
       </div>
-      <div class="flex-1 glass-card rounded-xl flex flex-col overflow-hidden">
-       <div id="quranHeader" class="p-6 border-b border-dustygold/20 flex justify-between items-center bg-black/20">
-        <div>
-         <h2 id="surahTitleAr" class="text-3xl font-amiri text-dustygold"></h2>
-         <p id="surahTitleEn" class="text-sm text-champagne/50"></p>
-        </div>
-        <audio id="mainAudio" controls class="max-w-[200px] md:max-w-xs"></audio>
-       </div>
-       <div id="verseDisplay" class="flex-1 overflow-y-auto p-6 custom-scrollbar bg-black/10">
-        <div id="noSelectQuran" class="h-full flex flex-col items-center justify-center opacity-30 text-center">
-         <i data-lucide="book-open" class="w-16 h-16 mb-4"></i>
-         <p>Select a Surah to read the Noble Quran</p>
-        </div>
-        <div id="loadingQuran" class="hidden h-full flex items-center justify-center">
-         <div class="loading-spinner"></div>
-        </div>
-        <div id="versesContent" class="space-y-4"></div>
-       </div>
-      </div>
-     </div>
     </section>
+    <!-- END UPDATED QURAN SECTION -->
 
     <section id="dhikr-page" class="page-content hidden p-8">
      <div class="text-center mb-12">
@@ -306,13 +318,12 @@
 
     window.onload = () => {
         lucide.createIcons();
-        updateIslamicDate(); // Initialize Date
+        updateIslamicDate();
         setupAdhkar();
         setupNames();
         setupSurahList();
         setupDhikr();
 
-        // Combined Navigation Logic
         const allNavs = document.querySelectorAll('[data-page]');
         allNavs.forEach(btn => {
             btn.onclick = () => {
@@ -333,7 +344,6 @@
             };
         });
 
-        // Tasbeeh Logic
         document.getElementById('tapZone').addEventListener('click', (e) => {
             currentCount++;
             document.getElementById('mainCount').innerText = currentCount;
@@ -346,7 +356,6 @@
         };
     };
 
-    // Islamic Date Fetcher
     async function updateIslamicDate() {
         try {
             const today = new Date();
@@ -406,15 +415,9 @@
     }
 
     function setupSurahList() {
-        const list = document.getElementById('surahList');
         const dropdown = document.getElementById('surah-dropdown');
         surahs.forEach((s, idx) => {
             const surahId = idx + 1;
-            const btn = document.createElement('button');
-            btn.className = "w-full text-left p-3 text-xs border-b border-white/5 hover:bg-dustygold/10 transition flex justify-between items-center group";
-            btn.innerHTML = `<span>${surahId}. ${s}</span> <i data-lucide="chevron-right" class="w-3 h-3 opacity-0 group-hover:opacity-100"></i>`;
-            btn.onclick = () => loadFullSurah(surahId, s);
-            list.appendChild(btn);
             const opt = document.createElement('option');
             opt.value = surahId;
             opt.textContent = `${surahId}. ${s}`;
@@ -426,20 +429,24 @@
                 loadFullSurah(id, surahs[id-1]);
             }
         };
-        lucide.createIcons();
     }
 
+    // START UPDATED QURAN JAVASCRIPT
     async function loadFullSurah(id, name) {
         const content = document.getElementById('versesContent');
         const loading = document.getElementById('loadingQuran');
         const noSelect = document.getElementById('noSelectQuran');
+        const header = document.getElementById('surahHeaderInfo');
         const audio = document.getElementById('mainAudio');
+        
         noSelect.classList.add('hidden');
+        header.classList.add('hidden');
         content.innerHTML = '';
         loading.classList.remove('hidden');
+
         const num = id.toString().padStart(3, '0');
         audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
-        audio.play();
+        
         try {
             const [arRes, enRes] = await Promise.all([
                 fetch(`https://api.alquran.cloud/v1/surah/${id}`),
@@ -447,23 +454,45 @@
             ]);
             const arData = await arRes.json();
             const enData = await enRes.json();
+
             document.getElementById('surahTitleAr').innerText = arData.data.name;
-            document.getElementById('surahTitleEn').innerText = `${name} - ${arData.data.englishNameTranslation}`;
+            document.getElementById('surahTitleEn').innerText = `${name} • ${arData.data.englishNameTranslation}`;
+            
+            const bismillahDiv = document.getElementById('bismillahAr');
+            if (id == 9) {
+                bismillahDiv.classList.add('hidden');
+            } else {
+                bismillahDiv.classList.remove('hidden');
+            }
+
             arData.data.ayahs.forEach((ayah, i) => {
+                let cleanText = ayah.text;
+                if (id != 1 && id != 9 && i === 0) {
+                    cleanText = ayah.text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "").trim();
+                }
+
                 const div = document.createElement('div');
-                div.className = "verse-container";
+                div.className = "group border-b border-dustygold/5 hover:bg-white/[0.02] transition-colors py-10 px-4";
                 div.innerHTML = `
-                    <div class="text-right font-amiri text-2xl text-dustygold mb-3 leading-loose">${ayah.text}</div>
-                    <div class="text-champagne/80 text-sm leading-relaxed"><span class="text-dustygold/50 mr-2">[${ayah.numberInSurah}]</span> ${enData.data.ayahs[i].text}</div>
+                    <div class="flex flex-col items-center">
+                        <div class="text-dustygold/30 text-xs font-mono mb-6 tracking-widest uppercase">Ayah ${ayah.numberInSurah}</div>
+                        <div class="text-center font-amiri text-4xl text-champagne mb-8 leading-[1.8] dir-rtl">${cleanText}</div>
+                        <div class="text-center text-champagne/70 text-lg leading-relaxed max-w-2xl font-light">
+                            ${enData.data.ayahs[i].text}
+                        </div>
+                    </div>
                 `;
                 content.appendChild(div);
             });
+
+            header.classList.remove('hidden');
         } catch (error) {
-            content.innerHTML = '<p class="text-red-500">Error loading verses.</p>';
+            content.innerHTML = '<p class="text-red-500 text-center">Connection error. Please try again.</p>';
         } finally {
             loading.classList.add('hidden');
         }
     }
+    // END UPDATED QURAN JAVASCRIPT
 
     function createRipple(e) {
         const zone = document.getElementById('tapZone');
