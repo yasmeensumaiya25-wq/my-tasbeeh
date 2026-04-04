@@ -21,7 +21,8 @@
             obsidian: '#050505',
             champagne: '#F7E7CE',
             dustygold: '#C5A059',
-            charcoal: '#111111'
+            charcoal: '#111111',
+            pastelPurple: '#D8B4FE'
           }
         }
       }
@@ -72,7 +73,8 @@
     }
 
     .dir-rtl { direction: rtl; }
-    .tafseer-box { background: rgba(197, 160, 89, 0.03); border: 1px dashed rgba(197, 160, 89, 0.2); }
+    /* Updated Tafseer Box Style */
+    .tafseer-box { background: rgba(216, 180, 254, 0.15); border: 1px solid rgba(216, 180, 254, 0.4); }
   </style>
  </head>
  <body class="h-full">
@@ -143,6 +145,7 @@
             <div id="surahMeta" class="flex justify-center gap-4 mb-4 text-[10px] uppercase tracking-widest text-dustygold/60 font-bold">
                 <span id="metaJuz" class="border border-dustygold/20 px-2 py-1 rounded"></span>
                 <span id="metaType" class="border border-dustygold/20 px-2 py-1 rounded"></span>
+                <span id="metaAyahs" class="border border-dustygold/20 px-2 py-1 rounded"></span>
             </div>
             <h2 id="surahTitleAr" class="text-6xl font-amiri text-dustygold mb-2"></h2>
             <p id="surahTitleEn" class="text-champagne/40 uppercase tracking-[0.2em] text-xs mb-8"></p>
@@ -446,10 +449,11 @@
         audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
         
         try {
+            // Using English Tafseer: en.mubarakpuri
             const [arRes, enRes, tafRes] = await Promise.all([
                 fetch(`https://api.alquran.cloud/v1/surah/${id}`),
                 fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`),
-                fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.jalalayn`)
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.mubarakpuri`)
             ]);
             
             const arData = await arRes.json();
@@ -459,6 +463,7 @@
             // Set Meta Data
             document.getElementById('metaJuz').innerText = `Juz ${arData.data.ayahs[0].juz}`;
             document.getElementById('metaType').innerText = arData.data.revelationType;
+            document.getElementById('metaAyahs').innerText = `${arData.data.numberOfAyahs} Ayahs`;
             document.getElementById('surahTitleAr').innerText = arData.data.name;
             document.getElementById('surahTitleEn').innerText = `${name} • ${arData.data.englishNameTranslation}`;
             
@@ -484,9 +489,11 @@
                         <div class="text-center text-champagne/70 text-lg leading-relaxed max-w-2xl font-light mb-6">
                             ${enData.data.ayahs[i].text}
                         </div>
-                        <div class="w-full max-w-2xl tafseer-box p-4 rounded-lg text-sm">
-                            <p class="text-[10px] uppercase tracking-widest text-dustygold/50 mb-2 font-bold">Tafseer al-Jalalayn</p>
-                            <p class="dir-rtl font-amiri text-champagne/60 text-lg leading-relaxed text-right">${tafData.data.ayahs[i].text}</p>
+                        <div class="w-full max-w-2xl tafseer-box p-5 rounded-xl text-sm shadow-lg">
+                            <p class="text-[10px] uppercase tracking-[0.2em] text-pastelPurple mb-3 font-bold">Deep Tafseer Insight</p>
+                            <p class="text-pastelPurple/90 text-sm leading-relaxed font-medium italic">
+                                ${tafData.data.ayahs[i].text}
+                            </p>
                         </div>
                     </div>
                 `;
