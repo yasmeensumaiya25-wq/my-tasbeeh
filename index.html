@@ -72,6 +72,7 @@
     }
 
     .dir-rtl { direction: rtl; }
+    .tafseer-box { background: rgba(197, 160, 89, 0.03); border: 1px dashed rgba(197, 160, 89, 0.2); }
   </style>
  </head>
  <body class="h-full">
@@ -79,7 +80,6 @@
    <aside class="w-64 bg-black border-r border-dustygold/20 flex flex-col hidden md:flex">
     <div class="p-8">
      <h1 class="text-2xl font-amiri font-bold text-dustygold tracking-widest">SoulSync</h1>
-     <!-- Islamic Date Display -->
      <div id="hijriDateSidebar" class="text-[11px] font-medium text-dustygold/80 mt-1 flex items-center gap-2">
          <i data-lucide="calendar" class="w-3 h-3"></i>
          <span id="dateDisplaySidebar">Loading...</span>
@@ -98,7 +98,6 @@
     <section id="tasbeeh-page" class="page-content p-8 max-w-4xl mx-auto flex flex-col items-center">
      <div class="text-center mt-12 mb-10">
       <h2 class="text-5xl font-amiri text-dustygold mb-2">Digital Dhikr</h2>
-      <!-- Secondary Islamic Date for Mobile/Hero -->
       <p id="dateDisplayHero" class="text-dustygold/60 text-xs mb-2 tracking-widest uppercase"></p>
       <p class="text-champagne/40 text-sm italic">Focus your heart on the Almighty</p>
      </div>
@@ -115,10 +114,9 @@
      </div>
     </section>
 
-    <!-- START UPDATED QURAN SECTION -->
+    <!-- QURAN SECTION -->
     <section id="quran-page" class="page-content hidden p-4 md:p-8">
       <div class="max-w-4xl mx-auto">
-        <!-- Top Selection Bar -->
         <div class="glass-card rounded-2xl p-4 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-0 z-10">
           <div class="relative w-full md:w-64">
             <select id="surah-dropdown" class="surah-select !bg-charcoal !border-dustygold/30 focus:border-dustygold transition-all text-sm">
@@ -130,7 +128,6 @@
           </div>
         </div>
 
-        <!-- Surah Display Area -->
         <div id="quran-reader-container">
           <div id="noSelectQuran" class="py-20 flex flex-col items-center justify-center opacity-30 text-center">
             <i data-lucide="book-open" class="w-16 h-16 mb-4"></i>
@@ -143,10 +140,14 @@
 
           <!-- Surah Header (Bismillah) -->
           <div id="surahHeaderInfo" class="hidden text-center mb-12">
+            <div id="surahMeta" class="flex justify-center gap-4 mb-4 text-[10px] uppercase tracking-widest text-dustygold/60 font-bold">
+                <span id="metaJuz" class="border border-dustygold/20 px-2 py-1 rounded"></span>
+                <span id="metaType" class="border border-dustygold/20 px-2 py-1 rounded"></span>
+            </div>
             <h2 id="surahTitleAr" class="text-6xl font-amiri text-dustygold mb-2"></h2>
             <p id="surahTitleEn" class="text-champagne/40 uppercase tracking-[0.2em] text-xs mb-8"></p>
             <div id="bismillahAr" class="text-4xl font-amiri text-dustygold/90 py-6 border-y border-dustygold/10">
-              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
             </div>
           </div>
 
@@ -155,7 +156,6 @@
         </div>
       </div>
     </section>
-    <!-- END UPDATED QURAN SECTION -->
 
     <section id="dhikr-page" class="page-content hidden p-8">
      <div class="text-center mb-12">
@@ -242,7 +242,6 @@
   </div>
 
   <script>
-    // Constants for Dhikr, Names, and Quran remain unchanged
     const adhkars = [
         { ar: "سُبْحَانَ اللَّهِ", en: "SubhanAllah" }, { ar: "الْحَمْدُ لِلَّهِ", en: "Alhamdulillah" },
         { ar: "اللَّهُ أَكْبَرُ", en: "Allahu Akbar" }, { ar: "أَسْتَغْفِرُ اللَّهَ", en: "Astaghfirullah" },
@@ -431,7 +430,6 @@
         };
     }
 
-    // START UPDATED QURAN JAVASCRIPT
     async function loadFullSurah(id, name) {
         const content = document.getElementById('versesContent');
         const loading = document.getElementById('loadingQuran');
@@ -448,13 +446,19 @@
         audio.src = `https://server8.mp3quran.net/afs/${num}.mp3`;
         
         try {
-            const [arRes, enRes] = await Promise.all([
+            const [arRes, enRes, tafRes] = await Promise.all([
                 fetch(`https://api.alquran.cloud/v1/surah/${id}`),
-                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`)
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/en.sahih`),
+                fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.jalalayn`)
             ]);
+            
             const arData = await arRes.json();
             const enData = await enRes.json();
+            const tafData = await tafRes.json();
 
+            // Set Meta Data
+            document.getElementById('metaJuz').innerText = `Juz ${arData.data.ayahs[0].juz}`;
+            document.getElementById('metaType').innerText = arData.data.revelationType;
             document.getElementById('surahTitleAr').innerText = arData.data.name;
             document.getElementById('surahTitleEn').innerText = `${name} • ${arData.data.englishNameTranslation}`;
             
@@ -468,7 +472,7 @@
             arData.data.ayahs.forEach((ayah, i) => {
                 let cleanText = ayah.text;
                 if (id != 1 && id != 9 && i === 0) {
-                    cleanText = ayah.text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "").trim();
+                    cleanText = ayah.text.replace("بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "").trim();
                 }
 
                 const div = document.createElement('div');
@@ -477,8 +481,12 @@
                     <div class="flex flex-col items-center">
                         <div class="text-dustygold/30 text-xs font-mono mb-6 tracking-widest uppercase">Ayah ${ayah.numberInSurah}</div>
                         <div class="text-center font-amiri text-4xl text-champagne mb-8 leading-[1.8] dir-rtl">${cleanText}</div>
-                        <div class="text-center text-champagne/70 text-lg leading-relaxed max-w-2xl font-light">
+                        <div class="text-center text-champagne/70 text-lg leading-relaxed max-w-2xl font-light mb-6">
                             ${enData.data.ayahs[i].text}
+                        </div>
+                        <div class="w-full max-w-2xl tafseer-box p-4 rounded-lg text-sm">
+                            <p class="text-[10px] uppercase tracking-widest text-dustygold/50 mb-2 font-bold">Tafseer al-Jalalayn</p>
+                            <p class="dir-rtl font-amiri text-champagne/60 text-lg leading-relaxed text-right">${tafData.data.ayahs[i].text}</p>
                         </div>
                     </div>
                 `;
@@ -492,7 +500,6 @@
             loading.classList.add('hidden');
         }
     }
-    // END UPDATED QURAN JAVASCRIPT
 
     function createRipple(e) {
         const zone = document.getElementById('tapZone');
